@@ -1,0 +1,1288 @@
+<html>
+<head>
+<title>
+Dungeon Raid
+</title>
+<style type="text/css">
+div.corners{
+	background-color: white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:500
+	
+	}
+
+div.corners2{
+	background-color:white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:100;
+	
+}	
+
+table.left{
+	position:relative;
+}
+table.right{
+	position:relative;
+}
+
+</style>
+
+<script language="javascript">
+
+
+//
+//
+//WARNING Game can run in firefox and IE.
+//HOWEVER it is very very very LAGGY and SLOW.
+//It will seem broken, but the game will be trying to load all the necessary components.
+//You will have a better experience in GOOGLE CHROME.
+//
+//
+//WASD to move
+//F to attack
+//Space to clear right side lines
+//
+//
+//Objective: Kill the boss
+//
+//
+//On the bottom, there are creater buttons.
+//The button on the left levels the chacter up.
+//The button on the right lets you win the game.
+
+
+
+
+//set up arrays for
+//characters and bosses
+var images = new Array("boss","pl1");
+//stats
+var statsImages = new Array("pl1s");
+//rocks (obstacles)
+var rockImages = new Array("rock1","rock2","rock3","rock4","rock5")
+
+//right side icon array for PICTURES
+var icons = new Array(
+	new Array("1td1","1td2","1td3","1td4","1td5","1td6"),
+	new Array("2td1","2td2","2td3","2td4","2td5","2td6"),
+	new Array("3td1","3td2","3td3","3td4","3td5","3td6"),
+	new Array("4td1","4td2","4td3","4td4","4td5","4td6"),
+	new Array("5td1","5td2","5td3","5td4","5td5","5td6"),
+	new Array("6td1","6td2","6td3","6td4","6td5","6td6")
+	
+);
+
+//value of stats. In game2 only the main character has stats
+var statsValue = new Array(0,2);
+
+//right side icon array for VALUE (each value is a different icon)
+var iconsNumber = new Array(
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0)
+
+);
+
+//right side icon array for CHOSEN
+//if icons is chosen, the number turns to a value of 1
+var iconsChosen = new Array(
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0)
+);
+
+//for movement and keypresses
+var keys;
+
+//keeps track of icons values of the right side
+var number = 5*1
+
+//load timers for gravity, jump, movement, statistics, and rock falling
+window.onload = new function(){
+
+
+	setInterval("move()",1000/60);
+	
+	setInterval("stats()",1000/60);
+	
+	setInterval("rocksFall()",1000/60)
+}
+
+//player object array
+function player(x,y,velx,vely,alive,hp,dam,level){
+	this.x = x;
+	this.y = y;
+	this.velx = velx;
+	this.vely = vely;
+	this.alive = alive;
+	this.hp = hp;
+	this.dam = dam;
+	this.level = level;
+}
+
+//rock object array
+function rocks(xR, yR, velyR){
+	this.xR = xR;
+	this.yR = yR;
+	this.velyR = velyR;
+}
+
+//boss object array
+function boss(xB, yB, hp){
+	this.xB = xB;
+	this.yB = yB;
+	this.hp = hp;
+	
+}
+
+//variables for character coordinates
+var x = 1*1;
+var y = 1*1;
+
+//variables for rock coordinates
+var xR = 50*1;
+var yR = 50*1;
+
+
+//array for each rock
+//gives each rock x value, y value and velocity
+var rock = new Array();
+for(var i=0;i<5;i++){
+	rock[i] = new rocks(xR,yR,2)
+}
+
+//set boss health and player level
+boss.hp = 5000
+player.level = 50;
+
+//variable for direction of the character to set appropriate pictures
+var direction = 0*1;
+
+//r for rows and c for columns
+//for the right side coordinates
+var r = 0*1;
+var c = 0*1;
+
+//prevr is the previous row and prevc is the previous column
+//to match the icons, the previous coordinates are needed
+var prevr = 0*1;
+var prevc = 0*1;
+
+//length sets the minimum length for a line on the right side
+var length = 0*1;
+
+//when finishing a line, selectFinish turns to a value of 1 to run the appropriate code
+var selectFinish = 0*1;
+
+//variables for player health
+var heart = 10000;
+var maxheart = 10000;
+
+//variables for player shield
+var shield = 1000;
+var maxshield = 1000;
+
+//variables for experience points, coins
+var exp = 100;
+var coin = 0*1;
+//determines if the character has a sword or not
+var sword = 1*1;
+
+//switch primarily used for the start of the game
+//randomly generates coordinates for rocks
+var rockSwitch = 0*1;
+
+//counts how many times the player hits the boss in a row
+var playerhits = 0*1;
+
+//function for max shield upgrade
+function shieldup(){
+	if(coin > 50){
+		coin -= 50;
+		maxshield += 100;
+	}
+}
+
+//function for health regen upgrade
+function regenup(){
+	if(coin > 25){
+		coin -= 25;
+		heart += 200;
+		if(heart > maxheart){
+			heart = maxheart
+		}
+	}
+}
+
+//function for stats
+function stats(){
+	
+	//gets player coordinates
+	player.x = parseInt(document.getElementById(images[1]).style.left);
+	player.y = parseInt(document.getElementById(images[1]).style.top);
+	
+	//checks value in stats array for appropriate picture
+	if(statsValue[0] == 2){
+		document.getElementById(statsImages[0]).src = "20damagep.png";
+	}
+	
+	//sets stats picture above the character
+	document.getElementById(statsImages[0]).style.left = player.x;
+	document.getElementById(statsImages[0]).style.top = player.y - 30;
+		
+		
+	//sets the sword animation and damage of the character
+	if(sword == 1){
+		player.dam = 20;
+		if(direction == 0){
+			document.getElementById("sword").style.left = player.x - 60;
+			document.getElementById("sword").style.top = player.y
+			
+		}
+		else if(direction == 1){
+			document.getElementById("sword").style.left = player.x + 70;
+			document.getElementById("sword").style.top = player.y
+			
+		}
+	}
+	
+	//changes value in stats value array
+	if(player.dam == 20){
+		statsValue[0] = 2;
+	}
+	
+	//changes pictures of the bars below
+	if(exp >= 100){
+		document.getElementById("exps").src = "xpbar.gif";
+	}
+	
+	if(coin == 0){
+		document.getElementById("coins").src = "coinbar0.gif"
+	}
+	else if(coin > 0 && coin <= 10){
+		document.getElementById("coins").src = "coinbar1.gif"
+	}
+	else if(coin > 10 && coin <= 20){
+		document.getElementById("coins").src = "coinbar2.gif"
+	}
+	else if(coin > 20 && coin <= 30){
+		document.getElementById("coins").src = "coinbar3.gif"
+	}
+	else if(coin > 30 && coin <= 40){
+		document.getElementById("coins").src = "coinbar4.gif"
+	}
+	else if(coin > 40 && coin <= 50){
+		document.getElementById("coins").src = "coinbar5.gif"
+	}
+	else if(coin > 50 && coin <= 60){
+		document.getElementById("coins").src = "coinbar6.gif"
+	}
+	else if(coin > 60 && coin <= 70){
+		document.getElementById("coins").src = "coinbar7.gif"
+	}
+	else if(coin > 70 && coin <= 80){
+		document.getElementById("coins").src = "coinbar8.gif"
+	}
+	else if(coin > 80 && coin <=90){
+		document.getElementById("coins").src = "coinbar9.gif"
+	}
+	else if(coin > 90 && coin <= 100){
+		document.getElementById("coins").src = "coinbar.gif"
+	}
+	
+	
+	if(shield == 0){
+		document.getElementById("shields").src = "shieldbar0.gif"
+	}
+	else if(shield > 0 && shield <= 10){
+		document.getElementById("shields").src = "shieldbar1.gif"
+	}
+	else if(shield > 10 && shield <= 20){
+		document.getElementById("shields").src = "shieldbar2.gif"
+	}
+	else if(shield > 20 && shield <= 30){
+		document.getElementById("shields").src = "shieldbar3.gif"
+	}
+	else if(shield > 30 && shield <= 40){
+		document.getElementById("shields").src = "shieldbar4.gif"
+	}
+	else if(shield > 40 && shield <= 50){
+		document.getElementById("shields").src = "shieldbar5.gif"
+	}
+	else if(shield > 50 && shield <= 60){
+		document.getElementById("shields").src = "shieldbar6.gif"
+	}
+	else if(shield > 60 && shield <= 70){
+		document.getElementById("shields").src = "shieldbar7.gif"
+	}
+	else if(shield > 70 && shield <= 80){
+		document.getElementById("shields").src = "shieldbar8.gif"
+	}
+	else if(shield > 80 && shield <=90){
+		document.getElementById("shields").src = "shieldbar9.gif"
+	}
+	else if(shield > 90 && shield <= 100){
+		document.getElementById("shields").src = "shieldbar.gif"
+	}
+
+	if(heart == 0){
+		document.getElementById("hearts").src = "heartbar0.gif"
+	}
+	else if(heart > 0 && heart <= 10){
+		document.getElementById("hearts").src = "heartbar1.gif"
+	}
+	else if(heart > 10 && heart <= 20){
+		document.getElementById("hearts").src = "heartbar2.gif"
+	}
+	else if(heart > 20 && heart <= 30){
+		document.getElementById("hearts").src = "heartbar3.gif"
+	}
+	else if(heart > 30 && heart <= 40){
+		document.getElementById("hearts").src = "heartbar4.gif"
+	}
+	else if(heart > 40 && heart <= 50){
+		document.getElementById("hearts").src = "heartbar5.gif"
+	}
+	else if(heart > 50 && heart <= 60){
+		document.getElementById("hearts").src = "heartbar6.gif"
+	}
+	else if(heart > 60 && heart <= 70){
+		document.getElementById("hearts").src = "heartbar7.gif"
+	}
+	else if(heart > 70 && heart <= 80){
+		document.getElementById("hearts").src = "heartbar8.gif"
+	}
+	else if(heart > 80 && heart <=90){
+		document.getElementById("hearts").src = "heartbar9.gif"
+	}
+	else if(heart > 90){
+		document.getElementById("hearts").src = "heartbar.gif"
+	}
+	
+	//if player health is lower than 0, you die
+	if(heart <= 0){
+	
+		alert("You Died.")
+		parent.location = "intro.htm"
+	
+	}
+	
+	if(boss.hp <= 0){
+		parent.location="end.htm"
+	}
+	
+	//outputs number indicators of each value
+	document.getElementById("outputhearts").innerHTML = Math.round(heart);
+	document.getElementById("outputxps").innerHTML = exp;
+	document.getElementById("outputshields").innerHTML = Math.round(shield);
+	document.getElementById("outputcoins").innerHTML = coin;
+	document.getElementById("outputlevel").innerHTML = player.level;
+}
+
+
+function placeIcons(){
+
+	for(row=0;row<6;row++){
+		for(col=0;col<6;col++){
+			
+			//variable for probability of icon
+			var probability = 0*1;
+			
+			//randomizes probability
+			probability = Math.floor(Math.random() * 99);
+			
+			//sests icon number depending on the probability value
+			if(probability >= 0 && probability <= 29){
+				iconsNumber[row][col] = 0;
+				document.getElementById(icons[row][col]).src = "coin.gif";
+			}
+			else if(probability >= 30 && probability <= 49){
+				iconsNumber[row][col] = 1;
+				document.getElementById(icons[row][col]).src = "potion.gif";
+			}
+			else if(probability >= 50 && probability <= 69){
+				iconsNumber[row][col] = 2;
+				document.getElementById(icons[row][col]).src = "shield.gif";
+			}
+			else if(probability >= 70 && probability <= 99){
+				iconsNumber[row][col] = 3;
+				document.getElementById(icons[row][col]).src = "sword.gif";
+			}
+		
+		}
+	
+	}
+
+}
+
+function select(first){
+
+	if(selectFinish == 0){
+		//number variable keeps track of the first variable
+		//necessary because "first" changes everytime the mouse goes over an icon
+		number = first;
+		selectFinish = 1;
+		
+		//previous row and col gets values
+		prevr = r;
+		prevc = c;
+		
+		//icon gets chosen depending on the first number
+		//values have to match
+		if(number == 0){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "coinG.gif"
+		}
+		else if(number == 1){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "potionG.gif"
+		}
+		else if(number == 2){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "shieldG.gif"
+		}
+		else if(number == 3){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "swordG.gif"
+		}
+		
+		//length increases after every icon
+		length += 1;
+		document.getElementById("value").innerHTML = first;
+	}
+	
+	//the line is finished and there is more than 2 icons selected
+	else if(selectFinish == 1 && length > 2){
+		for(a=0;a<6;a++){
+			for(b=0;b<6;b++){
+				
+				//the selected line does different things depending on the value
+				//if the numer is 0, you get coins; number = 1, hearts; number = 2, shield; number = 3, damage
+				if(iconsChosen[a][b] == 1){
+					if(iconsNumber[a][b] == 0){
+						if(coin < 100){
+							coin += 5;
+						}
+					}
+					else if(iconsNumber[a][b] == 1){
+						if(heart < maxheart){
+							heart += 20;
+						}
+					}
+					else if(iconsNumber[a][b] == 2){
+						if(shield < maxshield){
+							shield += 20;
+						}
+					}
+					else if(iconsNumber[a][b] == 3){
+						boss.hp -= 20;
+					}
+					
+					//each chosen one is blanked out
+					document.getElementById(icons[a][b]).src = "blank.gif"
+					
+					
+					//each blanked out icons is given a new value and variable
+					var probability = 0*1;
+			
+					probability = Math.floor(Math.random() * 99);
+					
+					iconsChosen[a][b] = 0;
+					number = 5;
+					length = 0;
+					
+					//depending on the probability, the number is changed to a coin, potion, shield, or sword
+					if(probability >= 0 && probability <= 29){
+						iconsNumber[a][b] = 0;
+						document.getElementById(icons[a][b]).src = "coin.gif";
+					}
+					else if(probability >= 30 && probability <= 49){
+						iconsNumber[a][b] = 1;
+						document.getElementById(icons[a][b]).src = "potion.gif";
+					}
+					else if(probability >= 50 && probability <= 69){
+						iconsNumber[a][b] = 2;
+						document.getElementById(icons[a][b]).src = "shield.gif";
+					}
+					else if(probability >= 70 && probability <= 99){
+						iconsNumber[a][b] = 3;
+						document.getElementById(icons[a][b]).src = "sword.gif";
+					}
+					
+				}
+
+			
+			}
+		}
+		selectFinish=0;
+	}
+	
+	
+}
+
+function rocksFall(){
+	for(a=0;a<3;a++){
+		//variables from the objects to get the x and y coordinates
+		rock[a].xR = parseInt(document.getElementById(rockImages[a]).style.left);
+		rock[a].yR = parseInt(document.getElementById(rockImages[a]).style.top);
+		
+		player.x = parseInt(document.getElementById(images[1]).style.left);
+		player.y = parseInt(document.getElementById(images[1]).style.top);
+		
+	
+		if(rockSwitch == 0){
+			for(b=0;b<3;b++){
+				//randomizes rocks x-coordinates for the start of the game
+				rock[b].xR = Math.floor(Math.random() * 400 + 180) - 200
+				rock[b].yR = 0
+				
+				//randomizes velocity for variation
+				var randomSpeed = Math.floor(Math.random() * 5 + 3)
+				rock[b].velyR = randomSpeed
+				
+				//draws rock objects as they fall
+				document.getElementById(rockImages[b]).style.left = rock[b].xR;
+				document.getElementById(rockImages[b]).style.top = rock[b].yR;
+				document.getElementById(rockImages[b]).src = "rock.png"
+				rockSwitch = 1
+			}
+		}
+		else if(rockSwitch == 1){
+			if(rock[a].yR < 350){
+				//rock is not at the bottom yet, keeps falling
+				rock[a].yR += rock[a].velyR
+			
+				document.getElementById(rockImages[a]).style.left = rock[a].xR;
+				document.getElementById(rockImages[a]).style.top = rock[a].yR;
+			}
+			else if(rock[a].yR >= 350){
+				//rock hits the bottom so gets new x-coord and resets fall
+				rock[a].xR = Math.floor(Math.random() * 450+120)
+				rock[a].yR = 0
+				
+				//randomizes velocity for variation
+				var randomSpeed = Math.floor(Math.random() * 5 + 1)
+				rock[a].velyR = randomSpeed
+				
+				document.getElementById(rockImages[a]).style.left = rock[a].xR;
+				document.getElementById(rockImages[a]).style.top = rock[a].yR;
+			}
+		
+		}
+		
+		//COLLISION
+		//damages character if the rock hits her
+		//if the shield is up, it damages the shield
+		if(rock[a].xR <= player.x + 70 && rock[a].xR >= player.x && rock[a].yR >= player.y - 10 && rock[a].yR <= player.y + 30){
+			if(shield <= 0){
+				heart -= 10
+			}
+			else{
+				shield -= 10
+			}
+		}
+		else if(rock[a].xR + 50 >= player.x && rock[a].xR + 50 <= player.x + 70 && rock[a].yR >= player.y - 10 && rock[a].yR <= player.y + 30){
+			if(shield <= 0){
+				heart -= 10
+			}
+			else{
+				shield -= 10
+			}
+		}
+		
+		
+		
+	}
+	
+	for(b=3;b<5;b++){	
+		//object variables for the spikes and player
+		rock[b].xR = parseInt(document.getElementById(rockImages[b]).style.left);
+		rock[b].yR = parseInt(document.getElementById(rockImages[b]).style.top);
+		
+		player.x = parseInt(document.getElementById(images[1]).style.left);
+		player.y = parseInt(document.getElementById(images[1]).style.top);
+		
+		if(rockSwitch == 0){
+			//randomizes x-coord for the spikes at the bottom
+			rock[b].xR = Math.floor(Math.random() * 450 + 120)
+			rock[b].yR = 300
+			
+			//randomizes speed for variation
+			var randomSpeed = Math.floor(Math.random() * 2 + 1)
+			rock[b].velyR = randomSpeed
+			
+			//draws spikes as the go up
+			document.getElementById(rockImages[b]).style.left = rock[b].xR;
+			document.getElementById(rockImages[b]).style.top = rock[b].yR;
+			document.getElementById(rockImages[b]).src = "spike.png";
+			rockSwitch = 1;
+			
+		}
+		else if(rockSwitch == 1){
+			if(rock[b].yR > 240){
+				//spikes has not reached their maximum height
+				//continues to go up
+				rock[b].yR -= rock[b].velyR
+			
+				document.getElementById(rockImages[b]).style.left = rock[b].xR;
+				document.getElementById(rockImages[b]).style.top = rock[b].yR;
+			}
+			else if(rock[b].yR <= 240){
+				//spikes reached their maximum height
+				//gets random coordinates to reset
+				rock[b].xR = Math.floor(Math.random() * 450+120)
+				rock[b].yR = 300
+				
+				//gets different velocity
+				var randomSpeed = Math.floor(Math.random() * 2 + 1)
+				rock[b].velyR = randomSpeed
+				
+				//draws spikes moving
+				document.getElementById(rockImages[b]).style.left = rock[b].xR;
+				document.getElementById(rockImages[b]).style.top = rock[b].yR;
+			}
+		
+		}
+		
+		//COLLISION
+		//spikes damage character if hits
+		if(rock[b].xR <= player.x + 70 && rock[b].xR >= player.x && rock[b].yR >= player.y && rock[b].yR <= player.y + 30){
+			if(shield <= 0){
+				heart -= 10
+			}
+			else{
+				shield -= 10
+			}
+		}
+		else if(rock[b].xR + 70 >= player.x && rock[b].xR + 70 <= player.x + 70 && rock[b].yR >= player.y && rock[b].yR <= player.y + 30){
+			if(shield <= 0){
+				heart -= 10
+			}
+			else{
+				shield -= 10
+			}
+		}
+		
+		document.getElementById("bosshp").innerHTML = boss.hp;
+	
+	}
+	
+	//BOSS SKILL
+	//pushes character after 10 consecutive hits
+	//prevents cheap progression of level
+	if(playerhits > 10){
+		for(a=0;a<100;a++){
+			player.x = parseInt(document.getElementById(images[1]).style.left);
+			player.x += 3
+			document.getElementById(images[1]).style.left = player.x;
+			document.getElementById("pushbackskill").src = "pushback.gif"
+			document.getElementById("pushbackskill").style.left = boss.xB + 138;
+			document.getElementById("pushbackskill").style.top = boss.yB;
+		}
+		//resets hits
+		playerhits = 0;
+	}
+	
+	
+}
+
+function over(next,row,col){
+	//code for scrolling over the icons on the right side
+	r=row;
+	c=col;
+	if(iconsChosen[r][c] == 0){
+	//checks if the next icon is adjacent to the icon chosen
+	if((r == prevr + 1 && c == prevc) || (r == prevr - 1 && c == prevc) || 
+	(r == prevr && c == prevc + 1) || (r == prevr && c == prevc - 1) || 
+	(r == prevr + 1 && c == prevc + 1) || (r == prevr + 1 && c == prevc - 1) ||
+	(r == prevr - 1 && c == prevc + 1) || (r == prevr - 1 && c == prevc - 1)){
+		//chooses icons by going over them
+		//ONLY if the number is equal to the next value
+		if(number == next){
+		if(number == 0){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "coinG.gif"
+		}
+		else if(number == 1){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "potionG.gif"
+		}
+		else if(number == 2){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "shieldG.gif"
+		}
+		else if(number == 3){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "swordG.gif"
+		}
+		
+		}
+		
+		
+	}
+	}
+	
+	document.getElementById("next").innerHTML = next;
+	
+}
+
+
+
+//key presses of player's movement
+function playerMovement(event){
+	if(window.event){
+		event = window.event;
+		keys = event.keyCode;
+		moveSide();
+	}
+	else{
+		keys = event.which;
+		moveSide();
+	}
+}
+
+
+function move(){
+	//gets player's x and y coordinates
+	player.x = parseInt(document.getElementById(images[1]).style.left);
+	player.y = parseInt(document.getElementById(images[1]).style.top);
+	
+	//player moves horizontally if inside boundaries
+	if(player.x >120 && player.x < 500){
+
+		player.x += player.velx
+	}
+	else{
+		if(player.x <= 121){
+			player.x += 2;
+		}
+		else if(player.x >= 500){
+			player.x -= 2;
+		}
+	}
+	
+	//player moves vertically if inside boundaries
+	if(player.y < 340 && player.y > 0){
+		player.y += player.vely
+	}
+	else{
+		if(player.y <= 1){
+			player.y += 5
+		}
+		else if(player.y >= 340){
+			player.y -= 5
+		}
+	}
+	
+	//draws character
+	document.getElementById(images[1]).style.left = player.x
+	document.getElementById(images[1]).style.top = player.y
+
+
+}
+
+
+
+function moveSide(){
+	//object variables for x and y coordinates for player
+	player.x = parseInt(document.getElementById(images[1]).style.left);
+	player.y = parseInt(document.getElementById(images[1]).style.top);
+	
+	//key for "S"
+	if(keys == 115){
+		//player moves down
+		player.vely = 4;
+		
+		//sword is hidden when moving
+		document.getElementById("sword").src = "blank.gif"
+		
+		//direction determines picture of the player
+		if(direction == 0){
+			document.getElementById(images[1]).src = "mountjump.png"
+		}
+		else if(direction == 1){
+			document.getElementById(images[1]).src = "mountjumpright.png"
+		}
+		
+	}
+	
+	//key for "W"
+	if(keys == 119){
+		//player moves up
+		player.vely = -5;
+		
+		//sword is hidden when moving
+		document.getElementById("sword").src = "blank.gif"
+		
+		//direction determines picture of the player
+		if(direction == 0){
+			document.getElementById(images[1]).src = "mountjump.png"
+		}
+		else if(direction == 1){
+			document.getElementById(images[1]).src = "mountjumpright.png"
+		}
+		
+		
+	}
+	
+	//key for "A"
+	if(keys == 97){
+		//player moves left
+		player.velx = -4;
+		
+		//sets direction
+		direction = 0;
+		
+		//sets appropriate pictures
+		//pushbackskill picture is reset as well as sword
+		document.getElementById("pushbackskill").src = "blank.gif"
+		document.getElementById("sword").src = "blank.gif"
+		document.getElementById(images[1]).src = "stand.gif"
+	}
+	
+	//key for "D"
+	if(keys == 100){
+		//player moves right
+		player.velx = 4;
+		
+		//sets direction
+		direction = 1;
+		
+		//sets appropriate pictures
+		//pushbackskill picture is reset as well as sword
+		document.getElementById("pushbackskill").src = "blank.gif"
+		document.getElementById("sword").src = "blank.gif"
+		document.getElementById(images[1]).src = "standright.gif"
+	}
+	
+	//key for "spacebar"
+	if(keys == 32){
+		for(a=0;a<6;a++){
+			for(b=0;b<6;b++){
+				//resets right side
+				//deselects icons
+				iconsChosen[a][b] = 0;
+				selectFinish = 0;
+				number = 5;
+				length = 0;
+				
+				//resets the icons
+				if(iconsNumber[a][b] == 0){
+					document.getElementById(icons[a][b]).src = "coin.gif"
+				}
+				else if(iconsNumber[a][b] == 1){
+					document.getElementById(icons[a][b]).src = "potion.gif"
+				}
+				else if(iconsNumber[a][b] == 2){
+					document.getElementById(icons[a][b]).src = "shield.gif"
+				}
+				else if(iconsNumber[a][b] == 3){
+					document.getElementById(icons[a][b]).src = "sword.gif"
+				}
+				
+			}
+		}
+	}
+	//key for "F"
+	if(keys == 102){
+		//variables for player's x and y coordinates
+		player.x = parseInt(document.getElementById(images[1]).style.left);
+		player.y = parseInt(document.getElementById(images[1]).style.top);
+		
+		//variables for boss's x and y coordinates
+		boss.xB = parseInt(document.getElementById(images[0]).style.left);
+		boss.yB = parseInt(document.getElementById(images[0]).style.top);
+		
+		//variables for sword's x and y coordinates
+		var swordX = parseInt(document.getElementById("sword").style.left);
+		var swordY = parseInt(document.getElementById("sword").style.top);
+	
+		//sword hits boss and damages it
+		if(swordX <= boss.xB + 150 && swordX >= boss.xB && swordY <= boss.yB + 280 && swordY + 80 >= boss.yB){
+			boss.hp -= player.dam;
+			playerhits += 1
+		}
+		
+		
+		//sword changes direction
+		if(direction == 0){
+			document.getElementById("sword").src = "charswordmountright.gif"
+		}
+		
+		else if(direction == 1){
+			document.getElementById("sword").src = "charswordmount.gif"
+		}	
+		
+		}
+		
+		
+	}
+
+function keyUp(event){
+	if(window.event){
+		event=window.event;
+		keys = event.keyCode;
+	}
+	else{
+		keys = event.which;
+	}
+	
+	//if the key is let go, the velocity is stopped
+	//for easy and smooth movement
+	//prevents choppy walking
+	if(keys == 83){
+		player.vely = 0;
+	
+	}
+	if(keys == 87){
+		player.vely = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[1]).src = "stand.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[1]).src = "standright.gif"
+		}
+	
+
+		
+		
+	}
+	if(keys == 65){
+		player.velx = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[1]).src = "stand.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[1]).src = "standright.gif"
+		}
+
+	}
+	if(keys == 68){
+		player.velx = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[1]).src = "stand.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[1]).src = "standright.gif"
+		}
+		
+		
+	}
+
+
+}
+
+
+</script>
+
+
+</head>
+
+<body onkeypress="playerMovement(event)" onkeyup="keyUp(event)" onload="placeIcons()">
+<center>
+<table width="1000" height="430">
+
+<tr>
+
+<td>
+
+<table width="600" height="430" background="mapBoss.gif" class="left">
+<tr>
+<td>
+<img src="rock.png" id="rock1" width="50" style="position:absolute; top:0; left:0;">
+<img src="rock.png" id="rock2" width="50" style="position:absolute; top:0; left:0;">
+<img src="rock.png" id="rock3" width="50" style="position:absolute; top:0; left:0;">
+<img src="spike.png" id="rock4" width="70" style="position:absolute; top:0; left:0;">
+<img src="spike.png" id="rock5" width="70" style="position:absolute; top:0; left:0;">
+<img src="blank.gif" id="pushbackskill" style="position:absolute;">
+<img src="mountjump.png" id="pl1" width="70" style="position:absolute; top:210; left:400">
+<img src="boss.png" id="boss" height="280" width="150"style="position:absolute; top:0; left:10">
+<img src="blank.gif" id="sword" style="position:absolute; top:80; left:270;">
+<img id="pl1s" width="50" height="30" style="position:absolute;"/>
+<label id="bosshp" style="position:absolute; top:300;left:30; color:white; font-size:30px"/>
+</td>
+</tr>
+</table>
+
+</td>
+
+<td width="400" background="frame.png">
+<table align="center" class="right">
+<tr>
+<td width="40" height="45">
+<img src="defupgrade.png" width="100" height="50" style="position:absolute; top:325; left:50;" onclick="shieldup()">
+<img src="hpregen.png" width="100" height="48" style="position:absolute; top:325; left:170" onclick="regenup()">
+<img src="priceshield.png" width="50" style="position:absolute; top:325; left:0">
+<img src="pricepotion.png" width="50" style="position:absolute; top:325; left:270">
+<img id="1td1" onclick="select(iconsNumber[0][0])" 
+ onmouseover="over(iconsNumber[0][0], 0, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="1td2" onclick="select(iconsNumber[0][1])"
+ onmouseover="over(iconsNumber[0][1], 0, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="1td3" onclick="select(iconsNumber[0][2])"
+ onmouseover="over(iconsNumber[0][2], 0, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="1td4" onclick="select(iconsNumber[0][3])"
+ onmouseover="over(iconsNumber[0][3], 0, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="1td5" onclick="select(iconsNumber[0][4])"
+ onmouseover="over(iconsNumber[0][4], 0, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="1td6" onclick="select(iconsNumber[0][5])"
+ onmouseover="over(iconsNumber[0][5], 0, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="2td1" onclick="select(iconsNumber[1][0])"
+ onmouseover="over(iconsNumber[1][0], 1, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="2td2" onclick="select(iconsNumber[1][1])"
+ onmouseover="over(iconsNumber[1][1], 1, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="2td3" onclick="select(iconsNumber[1][2])"
+ onmouseover="over(iconsNumber[1][2], 1, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="2td4" onclick="select(iconsNumber[1][3])"
+onmouseover="over(iconsNumber[1][3], 1, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="2td5" onclick="select(iconsNumber[1][4])"
+ onmouseover="over(iconsNumber[1][4], 1, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="2td6" onclick="select(iconsNumber[1][5])"
+ onmouseover="over(iconsNumber[1][5], 1, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="3td1" onclick="select(iconsNumber[2][0])"
+ onmouseover="over(iconsNumber[2][0], 2, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="3td2" onclick="select(iconsNumber[2][1])"
+ onmouseover="over(iconsNumber[2][1], 2, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="3td3" onclick="select(iconsNumber[2][2])"
+ onmouseover="over(iconsNumber[2][2], 2, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="3td4" onclick="select(iconsNumber[2][3])"
+ onmouseover="over(iconsNumber[2][3], 2, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="3td5" onclick="select(iconsNumber[2][4])"
+ onmouseover="over(iconsNumber[2][4], 2, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="3td6" onclick="select(iconsNumber[2][5])"
+ onmouseover="over(iconsNumber[2][5], 2, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="4td1" onclick="select(iconsNumber[3][0])"
+ onmouseover="over(iconsNumber[3][0], 3, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="4td2" onclick="select(iconsNumber[3][1])"
+ onmouseover="over(iconsNumber[3][1], 3, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="4td3" onclick="select(iconsNumber[3][2])"
+ onmouseover="over(iconsNumber[3][2], 3, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="4td4" onclick="select(iconsNumber[3][3])"
+ onmouseover="over(iconsNumber[3][3], 3, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="4td5" onclick="select(iconsNumber[3][4])"
+ onmouseover="over(iconsNumber[3][4], 3, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="4td6" onclick="select(iconsNumber[3][5])"
+ onmouseover="over(iconsNumber[3][5], 3, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="5td1" onclick="select(iconsNumber[4][0])"
+ onmouseover="over(iconsNumber[4][0], 4, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="5td2" onclick="select(iconsNumber[4][1])"
+ onmouseover="over(iconsNumber[4][1], 4, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="5td3" onclick="select(iconsNumber[4][2])"
+ onmouseover="over(iconsNumber[4][2], 4, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="5td4" onclick="select(iconsNumber[4][3])"
+ onmouseover="over(iconsNumber[4][3], 4, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="5td5" onclick="select(iconsNumber[4][4])"
+ onmouseover="over(iconsNumber[4][4], 4, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="5td6" onclick="select(iconsNumber[4][5])"
+ onmouseover="over(iconsNumber[4][5], 4, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="6td1" onclick="select(iconsNumber[5][0])"
+ onmouseover="over(iconsNumber[5][0], 5, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="6td2"  onclick="select(iconsNumber[5][1])"
+ onmouseover="over(iconsNumber[5][1], 5, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="6td3"  onclick="select(iconsNumber[5][2])"
+ onmouseover="over(iconsNumber[5][2], 5, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="6td4"  onclick="select(iconsNumber[5][3])"
+ onmouseover="over(iconsNumber[5][3], 5, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="6td5"  onclick="select(iconsNumber[5][4])"
+ onmouseover="over(iconsNumber[5][4], 5, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="6td6"  onclick="select(iconsNumber[5][5])"
+ onmouseover="over(iconsNumber[5][5], 5, 5)"/>
+</td>
+
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<table width="1000" height="150" background="bottom2.gif">
+<tr>
+<td>
+
+
+<table width="300" height="150" style="position:relative;">
+<tr>
+<td>
+
+<img src="profile.png" height="170" width="220" style="position:absolute; top:0; left:75;"/>
+
+</td>
+</tr>
+</table>
+
+
+</td>
+
+
+<td>
+
+<div class="corners">
+<table width="500" style="position:relative;">
+<tr height="50">
+<td align="center">
+<div style="position:absolute; top:1; left:100;font-size:40px; color:black; font-weight:bold;" id="outputhearts"></div>
+<img src="heartbar0.gif" width="240" id="hearts">
+</td>
+<td align="center">
+<div style="position:absolute; top:1; left:380; font-size:40px; color:green; font-weight:bold;" id="outputxps"></div>
+<img src="xpbar0.gif" width="240" id="exps">
+</td>
+</tr>
+<tr height="50">
+<td align="center">
+<div style="position:absolute; top:55; left:100; font-size:40px; color:blue; font-weight:bold;" id="outputshields"></div>
+<img src="shieldbar0.gif" width="240" id="shields">
+</td>
+<td align="center">
+<div style="position:absolute; top:55; left:380; font-size:40px; color:FDD017; font-weight:bold;" id="outputcoins"></div>
+<img src="coinbar0.gif" width="240" id="coins">
+</td>
+
+</tr>
+</table>
+</div>
+
+</td>
+<td>
+
+<div class="corners2">
+<table>
+<tr>
+<td>
+LEVEL:
+<div id="outputlevel"></div>
+</td>
+</tr>
+</table>
+</div>
+
+
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td id="value">
+a
+</td>
+<td id="next">
+a
+</td>
+<td>
+<input type="button" onclick="player.level += 1; exp = 0;
+		maxheart += 20;
+		heart += maxheart/6;">
+<input type="button" onclick="parent.location='end.htm'">
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

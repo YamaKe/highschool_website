@@ -1,0 +1,229 @@
+<html>
+<head>
+<title>
+BallFive
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<style type="text/css">
+td{color:white; font-family:arial;}
+.fontSize{font-size:22px;}
+
+html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+
+	
+</style>
+
+<script language="javascript">
+
+var onOff = 0;
+
+var array = new Array("ballOne", "ballTwo", "ballThree", "ballFour", "ballFive");
+var directionX = new Array(5, 5, -5, -5, 5);
+var directionY = new Array(-5, -5, 5, 5, 5);
+
+var xCoord = new Array();
+var yCoord = new Array();
+
+
+
+function Move(){
+
+for(var a=0;a<5;a++){
+
+bump(a);
+
+xCoord[a] = parseInt(document.getElementById(array[a]).style.left);
+yCoord[a] = parseInt(document.getElementById(array[a]).style.top);
+
+if(xCoord[a]>1000){
+directionX[a] = -5
+}
+
+else if(xCoord[a]<=300){
+directionX[a] = 5
+}
+
+if(yCoord[a]<=300){
+directionY[a] = 5
+}
+
+else if(yCoord[a]>550){
+directionY[a] = -5
+}
+
+
+xCoord[a] += directionX[a];
+yCoord[a] += directionY[a];
+
+
+document.getElementById(array[a]).style.left = xCoord[a]
+document.getElementById(array[a]).style.top = yCoord[a]
+
+}
+}
+
+
+
+function bump(a){
+
+
+for(var b=0;b<=5;b++){
+if( b == a ){
+break;
+}
+else{
+xCoord[a] = parseInt(document.getElementById(array[a]).style.left);
+yCoord[a] = parseInt(document.getElementById(array[a]).style.top);
+xCoord[b] = parseInt(document.getElementById(array[b]).style.left);
+yCoord[b] = parseInt(document.getElementById(array[b]).style.top);
+
+
+if((xCoord[a]) == (xCoord[b] + 50) && ((yCoord[a] - 50) >= yCoord[b] >= (yCoord[a]+50)) ){
+
+directionX[a] = 5
+directionX[b] = -5
+
+}
+else if((xCoord[a] + 50) == (xCoord[b]) && ((yCoord[a] + 50) <= yCoord[b] <= (yCoord[a]-50)) ){
+
+directionX[a] = 5
+directionX[b] = -5
+
+}
+else if((yCoord[a]) == (yCoord[b] + 50) && ((xCoord[a] - 50) >= xCoord[b] >= (xCoord[a]+50)) ){
+
+directionY[a] = 5
+directionY[b] = -5
+
+}
+else if((yCoord[a] + 50) == (yCoord[b]) && ((xCoord[a] - 50) >= xCoord[b] >= (xCoord[a]+50)) ){
+
+directionY[a] = 5
+directionY[b] = -5
+
+}
+
+xCoord[a] += directionX[a];
+yCoord[a] += directionY[a];
+xCoord[b] += directionX[b];
+yCoord[b] += directionY[b];
+
+document.getElementById(array[a]).style.left = xCoord[a];
+document.getElementById(array[a]).style.top = yCoord[a];
+document.getElementById(array[b]).style.left = xCoord[b];
+document.getElementById(array[b]).style.top = yCoord[b];
+
+}
+
+}
+
+}
+
+
+
+function Timer(){
+if(onOff == 0){
+	onOff = 1;
+	timer = setInterval("Move()", 160);
+}
+else if(onOff == 1){
+	onOff = 0
+	clearInterval(timer);
+}
+
+}
+
+</script>
+
+</head>
+
+
+
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+<center>
+<table width="800px">
+<tr>
+<td>
+<center>
+
+<h1><img src="heading.jpg"></h1>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self">Sophmore</a></li>
+	<li><a href="sophmore2.htm" target="_self"><span class="tag">Sophmore 2nd</span></a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign16.htm" target="_self">BallOne</a></li>
+	<li><a href="assign17.htm" target="_self"><span class="tag">BallFive</span></a></li>
+	<li><a href="assign18.htm" target="_self">Fish</a></li>
+	<li><a href="assign19.htm" target="_self">Tank</a></li>
+	<li><a href="assign20.htm" target="_self">Digital Profile</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<input type="button" name="Auto" value="Animate" onclick="Timer()"/>
+<img width="50" height="50" style="position:absolute; top:500; left:500" id="ballOne" src="ball.jpg">
+<img width="50" height="50" style="position:absolute; top:350; left:300" id="ballTwo" src="ball.jpg">
+<img width="50" height="50" style="position:absolute; top:600; left:350" id="ballThree" src="ball.jpg">
+<img width="50" height="50" style="position:absolute; top:450; left:750" id="ballFour" src="ball.jpg">
+<img width="50" height="50" style="position:absolute; top:300; left:950" id="ballFive" src="ball.jpg">
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<table align="left">
+<tr>
+<td>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+</td>
+</tr>
+</table>
+
+</center>
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

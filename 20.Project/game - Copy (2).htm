@@ -1,0 +1,504 @@
+<html>
+<head>
+<title>
+Dungeon Raid
+</title>
+<style type="text/css">
+div.corners{
+	background-color: white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:500
+	
+	}
+	
+table.left{
+	position:relative;
+}
+
+
+</style>
+
+<script language="javascript">
+
+var images = new Array("ai1","ai2","ai3","ai4","ai5","ai6","ai7","ai8","ai9","ai10","pl1");
+var platforms = new Array("plat1", "plat2");
+
+var keys;
+
+window.onload = new function(){
+	setInterval("gravity()",1000/60);
+}
+window.onload = new function(){
+	setInterval("jump()",1000/90);
+}
+window.onload = new function(){
+	setInterval("move()",1000/60);
+}
+
+function enemies(xE,yE,velxE,velyE,aliveE,hpE){
+	this.xE = xE;
+	this.yE = yE;
+	this.velxE = velxE;
+	this.velyE = velyE;
+	this.aliveE = aliveE;
+	this.hpE = hpE;
+}
+
+function player(x,y,velx,vely,alive,hp){
+	this.x = x;
+	this.y = y;
+	this.velx = velx;
+	this.vely = vely;
+	this.alive = alive;
+	this.hp = hp;
+
+}
+
+function plat(xP,yP){
+	this.xP = xP;
+	this.yP = yP;
+}
+
+
+var enemiesArray = new Array();
+
+var x = 1*1;
+var y = 1*1;
+
+var xP = 1*1;
+var yP = 1*1;
+
+var gravityEnable = 1*1;
+var jumpEnable = 0*1;
+
+var aKeyValue = 0*1;
+var dKeyValue = 0*1;
+
+var jumpNumber = 0*1;
+var allowDown = 0*1;
+	
+var direction = 0*1;
+	
+//var xE = 1*1;
+//var yE = 1*1;
+
+//for(var a=0;a<10;a++){
+//	enemiesArray[a] = new enemies(xE,yE,0,0,1,10);
+//}
+
+
+
+function jump(){
+	
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	if(jumpEnable == 1){
+
+		jumpNumber += 1;
+	
+		if(jumpNumber >= 0 && jumpNumber < 15){
+			player.y -= 5
+		}
+		
+		if(jumpNumber >= 20){
+			jumpNumber = 0;
+			
+			gravityEnable = 1
+			
+		}
+		
+	}
+	
+	document.getElementById(images[10]).style.left = player.x
+	document.getElementById(images[10]).style.top = player.y
+	
+	
+}
+
+
+function playerMovement(event){
+	if(window.event){
+		event = window.event;
+		keys = event.keyCode;
+		moveSide();
+	}
+	else{
+		keys = event.which
+		moveSide();
+	}
+}
+
+function move(){
+
+	
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	if(player.x > 0 && player.x < 570){
+		player.x += player.velx
+	}
+	else{
+		if(player.x <= 1){
+			player.x += 2
+		}
+		else if(player.x >= 570){
+			player.x -= 2
+		}
+	}
+	
+	if(player.y < 365){
+		player.y += player.vely
+	}
+	
+	
+	for(a=0;a<2;a++){
+		plat.xP = parseInt(document.getElementById(platforms[a]).style.left);
+		plat.yP = parseInt(document.getElementById(platforms[a]).style.top);
+	
+		
+		if(player.y + 50 >= plat.yP && player.y < plat.yP){
+			gravityEnable = 0;
+			allowDown = 0;
+		
+			if(player.x > plat.xP + 84){
+				gravityEnable = 1;
+			
+			}
+			else if(player.x + 30 < plat.xP ){
+				gravityEnable = 1;
+		
+			}
+		}
+	
+	}
+	
+	document.getElementById(images[10]).style.left = player.x
+	document.getElementById(images[10]).style.top = player.y
+	
+	
+}
+
+
+function gravity(){
+
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	if(gravityEnable == 1){
+		if(player.y + 50 < 415 && player.y + 50 > 280){
+			player.y += 5
+			jumpEnable = 0;
+		}
+		else if(player.y + 50 < 280 && player.y + 50 > 80){
+			player.y += 5;
+			jumpEnable = 0;
+			allowDown = 1;
+		}
+	
+	
+	}
+	
+	
+	document.getElementById(images[10]).style.left = player.x
+	document.getElementById(images[10]).style.top = player.y
+		
+	
+}
+
+
+function moveSide(){
+
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	if(keys == 115){
+		if(allowDown == 1){
+			player.vely = 5;
+			document.getElementById(images[10]).src = "CharacterJumpLeft.gif"
+		}
+		else if(allowDown == 0){
+		
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+		
+	}
+	if(keys == 119){
+		
+		jumpEnable = 1;
+		
+		gravityEnable = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterJumpLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterJumpRight.gif"
+		}
+	}
+	if(keys == 97){
+		
+		player.velx = -3;
+		direction = 0;
+		document.getElementById(images[10]).src = "CharacterWalkLeft.gif";
+	}
+	if(keys == 100){
+		player.velx = 3;
+		direction = 1;
+		document.getElementById(images[10]).src = "CharacterWalkRight.gif";
+	}
+	
+}
+
+function keyUp(event){
+	if(window.event){
+		event=window.event;
+		keys = event.keyCode;
+	}
+	else{
+		keys = event.which;
+	}
+	
+	if(keys == 83){
+		player.vely = 0;
+		
+	}
+	if(keys == 87){
+	//up
+		player.vely = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+	}
+	
+	if(keys == 65){
+		player.velx = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+	}
+	if(keys == 68){
+		player.velx = 0;
+		
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}	
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+	}
+
+}
+
+
+</script>
+
+
+</head>
+
+<body onkeypress="playerMovement(event)" onkeyup="keyUp(event)">
+<center>
+<table width="1000" height="430">
+
+<tr>
+
+<td>
+
+<table width="600" height="430" background="map.png" class="left">
+<tr>
+<td>
+
+<img src="platform.gif" id="plat1" style="position:absolute; top:350;left:260">
+<img src="platform.gif" id="plat2" style="position:absolute; top:205;left:255">
+<img src="CharacterStand.gif" id="pl1" width="30" height="50" style="position:absolute; top:300; left:100 " />
+</td>
+</tr>
+</table>
+
+</td>
+
+<td width="400" background="frame.png">
+<table align="center">
+<tr>
+<td width="40" height="45">
+<img src="coin.gif">
+</td>
+<td width="40" height="45">
+<img src="potion.gif">
+</td>
+<td width="40" height="45">
+<img src="sword.gif">
+</td>
+<td width="40" height="45">
+<img src="potion.gif">
+</td>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img src="coin.gif">
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+<img src="sword.gif">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table width="1000" height="150" background="bottom2.gif">
+<tr>
+<td>
+
+<table width="300" height="150">
+<tr>
+<td>
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+<img src="profile.png" height="140" width="180">
+
+</td>
+</tr>
+</table>
+</td>
+
+
+<td>
+<center>
+<div class="corners">
+<table width="500">
+<tr height="50">
+<td align="right">
+<img src="heartbar.png" width="240">
+</td>
+<td align="right">
+<img src="potionbar.png" width="240">
+</td>
+</tr>
+<tr height="50">
+<td align="right">
+<img src="shieldbar.png" width="240">
+</td>
+<td align="right">
+<img src="coinbar.png" width="240">
+</td>
+
+</tr>
+</table>
+</div>
+</center>
+
+
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

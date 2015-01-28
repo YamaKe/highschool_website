@@ -1,0 +1,206 @@
+<html>
+<head>
+<title>
+Homepage
+</title>
+
+<link rel="stylesheet" type="text/css" href="styleSheet.css">
+
+<script language="javascript">
+	function change(name){
+		//var par = document.getElementById("para");
+		//var emb = document.getElementById("embe");
+		//par.setAttribute("src", name);
+		//emb.setAttribute("value", name);
+		
+		//<ul class="menuList">
+		//<li><a onclick="change(0)">Greeting Card</a></li>
+		//<li><a onclick="change(1)">Landscape</a></li>
+		//<li>c</li>
+		//<li>d</li>
+		//<li>e</li>
+		//<li>f</li>
+		//</ul>
+		
+		if(name == 0){
+			document.getElementById('flash').innerHTML = "<embed src='greetingcard.swf' name='greet'></embed>";
+		}
+		else if(name == 1){
+			document.getElementById('flash').innerHTML = "<embed src='landscape.swf' name='land'></embed>";
+		}
+		
+	}
+	function heightbox(){
+		document.getElementById('welcometext').innerHTML = "<b>Welcome to my webpage! A little introduction of myself; I am currently a Junior in Brea Olinda High School GITA program. GITA or the Global Information Technology Academy is a program that allows students to gain knowledge on programming.<br><br>This webpage is a showcase of my Junior level projects based on Flash. Flash is centered around animations using frame-by-frame drawings and motion tweens, so you can expect many interesting animations in the future.<br>I will be posting my future projects and updating my website regularly so be sure to visit often.</b>";
+		document.getElementById('contacttext').innerHTML = "<center><b><br><br>Kevin Lee<br>Email: kevin651102@gmail.com<br><br>Brea Olinda High School<br>bohs.bousd.us<br>Phone:714.990.7850</b></center>";
+		
+		
+	}
+</script>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+	
+	/* pushes the page to the full capacity of the viewing area */
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	
+	/* prepares the background image to full capacity of the viewing area */
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	
+	/* places the content ontop of the background image */
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+	
+	
+	
+</style>
+
+</head>
+
+<body>
+
+<div id="bg"><img src="skybluebackground.jpg" width="100%" height="100%" alt="">
+
+</div>
+
+<center>
+<div class="topbar">
+
+	<ul class="topmenu" width="80">
+		<li>GITA Webpage</li>
+		<li>-</li>
+		<li class="name">Kevin Lee</li>
+		<li class="circle"><img src="circleH.gif"></li>
+		<li><a href="index.htm">Home</a></li>
+		<li class="circle"><img src="circleF.gif"></li>
+		<li><a href="freshman.html">Freshman</a></li>
+		<li class="circle"><img src="circleS.gif"></li>
+		<li><a href="sophmorehome.htm">Sophmore</a></li>
+		<li class="circle"><img src="circleJ.gif"></li>
+		<li><a>Junior</a></li>
+	</ul>
+
+</div>
+<div class="secondBlock relative">
+
+	<div class="logo">
+		<img src="logo.gif" height="150px">
+	</div>
+	<div class="welcome">
+		<h1 class="welcomeHeader"><div class="headerbackground"></div>YamaKe Productions</h1>
+		<p>Technology is the future. I plan to be a part of it.
+		<br>
+		
+		Creating computer-based projects for the sake of creating.
+		<br>
+		<font size="4">Please use Google Chrome to view this website.</font>
+		</p>
+	</div>
+	
+</div>
+<table>
+<tr>
+<td width="250px">
+<div class="leftMenu">
+	<h1 class="menuHeader"><div class="menubackground"></div> Junior Projects</h1>
+	<a href="project.htm"><img src="project.png" width="250px" height="370px"></a>
+</div>
+</td>
+<td width="720px">
+<div class="contentOut">
+	Welcome Message and Purpose
+	<br>
+	
+	
+
+	
+	<div class="contentIn" onmouseover="heightbox()">
+	<center><span class="hoverText">HOVER</span></center>
+	<p id="welcometext" class="weltext"></p>
+	</div>
+	
+	Contact Info:
+	<table>
+	<tr>
+	<td>
+	<div class="contentIn" onmouseover="heightbox()">
+	<center><span class="hoverText">HOVER</span></center>
+	<p id="contacttext" class="weltext"></p>
+	</div>
+	</td>
+	</tr>
+	</table>
+	
+	<center>Final Projects</center>
+	
+	
+	<a href="Project.zip"><div class="ochiruImg" id="och"></div></a>
+	<a href="SophProject.zip"><div class="mapleImg" id="map"></div></a>
+	<br>
+	
+</div>
+
+
+
+</td>
+</tr>
+
+</table>
+<table>
+
+
+<tr>
+<td>
+<div class="csafetyBodyLeft">
+
+<span class="botText">Ezreal's Escape</span>
+<br>
+Junior Year Final Project
+<br>
+Fight to escape in this side-scrolling flash game!
+<br>
+</div>
+</td>
+<td>
+<div class="csafetyBodyRight">
+<a href="juniorfinal.html"><img src="ezreal.png" height="100px" width="500" align="right"></img></a>
+</div>
+</td>
+
+
+</tr>
+
+
+<tr>
+<td>
+<div class="csafetyBodyLeft">
+
+<span class="botText">Cybersafety Flash Website</span>
+<br>
+Junior Year Midterm Project
+<br>
+Educate yourself on the dangers of the internet! Ninja style!
+<br>
+<span style="color:red">Please wait for the videos to load!</span>
+</div>
+</td>
+<td>
+<div class="csafetyBodyRight">
+<a href="cybersafety.html"><img src="cybersafety.png" height="100px" width="500" align="right"></img></a>
+</div>
+</td>
+
+
+</tr>
+</table>
+
+
+</center>
+
+</body>
+</html>

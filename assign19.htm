@@ -1,0 +1,363 @@
+<html>
+<head>
+<title>
+Tank
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+td{color:white; font-family:arial;}
+.fontSize{font-size:22px;}
+
+html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+
+	
+</style>
+<script language="javascript">
+
+var arrayTanks = new Array("ai1", "ai2", "ai3", "ai4", "ai5", "player");
+
+var alive = new Array(1, 1, 1, 1, 1, 1);
+var lives = new Array(3, 3, 3, 3, 3, 3);
+var bullets = new Array("bulletOne", "bulletTwo", "bulletThree", "bulletFour", "bulletFive", "bulletSix");
+
+var dirX = new Array();
+var dirY = new Array();
+
+var xCai = new Array();
+var yCai = new Array();
+
+var xCbul = new Array();
+var yCbul = new Array();
+
+var keys;
+
+var onOff = 0*1;
+var bulletSwitch = new Array(0, 0, 0, 0, 0, 0);
+var bulletCoord = new Array(0, 0, 0, 0, 0, 0);
+var direction = new Array(3, 3, 3, 3, 3, 1);
+
+//97left115down100right119up
+
+function keyFunction(event){
+	
+	xCai[5] = parseInt(document.getElementById(arrayTanks[5]).style.left);
+	yCai[5] = parseInt(document.getElementById(arrayTanks[5]).style.top);
+
+	if(window.event){
+		event=window.event;
+		keys = event.keyCode;
+	}
+	else{
+		keys = event.which
+	}
+		
+
+	if(keys == 97){
+		if(xCai[5] > 300 && alive[5] == 1){
+			xCai[5] -= 15;
+		}
+		if(bulletSwitch[5] == 0){
+			direction[5] = 3
+		}
+		document.getElementById(arrayTanks[5]).src = "tankleftPlayer.jpg";
+	}
+	else if(keys == 115){
+		if(yCai[5] + 40 < 630  && alive[5] == 1){
+			yCai[5] += 15;
+		}
+		if(bulletSwitch[5] == 0){
+			direction[5] = 2
+		}
+		document.getElementById(arrayTanks[5]).src = "tankdownPlayer.jpg";
+	}
+	else if(keys == 100){
+		if(xCai[5] + 40 < 1100  && alive[5] == 1){
+			xCai[5] += 15;
+		}
+		if(bulletSwitch[5] == 0){
+			direction[5] = 1
+		}	
+		document.getElementById(arrayTanks[5]).src = "tankrightPlayer.jpg";
+		}
+	else if(keys == 119){
+		if(yCai[5] > 300  && alive[5] == 1){
+			yCai[5] -= 15;
+		}
+		if(bulletSwitch[5] == 0){
+			direction[5] = 0
+		}
+		document.getElementById(arrayTanks[5]).src = "tankupPlayer.jpg";
+	}
+	if(keys == 106){
+		bulletSwitch[5] = 1
+	}
+	
+	document.getElementById(arrayTanks[5]).style.left = xCai[5];
+	document.getElementById(arrayTanks[5]).style.top = yCai[5];
+}
+
+function TimerTank(){
+	if(onOff == 0){
+		onOff = 1;
+		timer = setInterval("tank()", 10);
+	}
+	else if(onOff == 1){
+		onOff = 0;
+		clearInterval(timer);
+	}
+
+}
+
+function tank(){
+	for(a=0;a<5;a++){
+		if(alive[a] == 1){
+			
+			xCai[a] = parseInt(document.getElementById(arrayTanks[a]).style.left);
+			yCai[a] = parseInt(document.getElementById(arrayTanks[a]).style.top);
+			
+			if(xCai[5] + 40 < xCai[a]){
+				dirX[a] = -1
+				dirY[a] = 0
+				if(bulletSwitch[a] == 0){
+				direction[a] = 3
+				}
+				document.getElementById(arrayTanks[a]).src = "tankleft.jpg"
+			}
+			else if(xCai[5] > xCai[a] + 40){
+				dirX[a] = 1
+				dirY[a] = 0
+				if(bulletSwitch[a] == 0){
+				direction[a] = 1
+				}
+				document.getElementById(arrayTanks[a]).src = "tankright.jpg"
+			}
+			else if(yCai[5] > yCai[a] + 40){
+				dirY[a] = 1
+				dirX[a] = 0
+				if(bulletSwitch[a] == 0){
+				direction[a] = 2
+				}
+				document.getElementById(arrayTanks[a]).src = "tankdown.jpg"
+			}
+			else if(yCai[5] + 40 < yCai[a]){
+				dirY[a] = -1
+				dirX[a] = 0
+				if(bulletSwitch[a] == 0){
+				direction[a] = 0
+				}
+				document.getElementById(arrayTanks[a]).src = "tankup.jpg"
+			}
+			
+			xCai[a] += dirX[a];
+			yCai[a] += dirY[a];
+			
+			document.getElementById(arrayTanks[a]).style.left = xCai[a];
+			document.getElementById(arrayTanks[a]).style.top = yCai[a];
+			
+			var shoot = Math.floor(Math.random() * 1300);
+			if(shoot >= 0 && shoot <= 1){
+				bulletSwitch[a] = 1
+			}
+			
+		}
+	}
+	
+	
+	
+	
+	for(b=0;b<6;b++){
+	
+		if(bulletSwitch[b] == 1){
+			if(bulletCoord[b] == 0){
+				xCbul[b] = parseInt(document.getElementById(arrayTanks[b]).style.left + 20);
+				yCbul[b] = parseInt(document.getElementById(arrayTanks[b]).style.top + 20);
+				bulletCoord[b] = 1;
+			}
+		if(bulletCoord[b] == 1){
+		
+			
+			if(direction[b] == 0){
+				yCbul[b] -= 10;
+			}
+			else if(direction[b] == 1){
+				xCbul[b] += 10;
+			}
+			else if(direction[b] == 2){
+				yCbul[b] += 10;
+			}
+			else if(direction[b] == 3){
+				xCbul[b] -= 10
+			}
+			document.getElementById(bullets[b]).src = "bullet.jpg"
+			document.getElementById(bullets[b]).style.left = xCbul[b];
+			document.getElementById(bullets[b]).style.top = yCbul[b];
+			
+			hit(b)
+			
+			if(yCbul[b] < 300){
+				bulletCoord[b] = 0
+				bulletSwitch[b] = 0
+				document.getElementById(bullets[b]).src = "blank.gif"
+				
+			}
+			else if(xCbul[b] > 1100){
+				bulletCoord[b] = 0
+				bulletSwitch[b] = 0
+				document.getElementById(bullets[b]).src = "blank.gif"
+			}
+			else if(yCbul[b] > 650){
+				bulletCoord[b] = 0
+				bulletSwitch[b] = 0
+				document.getElementById(bullets[b]).src = "blank.gif"
+			}
+			else if(xCbul[b] < 300){
+				bulletCoord[b] = 0
+				bulletSwitch[b] = 0
+				document.getElementById(bullets[b]).src = "blank.gif"
+			}
+			
+		}
+
+		}
+	
+	}
+}
+
+function hit(b){
+		for(d=0;d<6;d++){
+			if(b == d){
+				break;
+			}
+			else{
+				xCbul[b] = parseInt(document.getElementById(bullets[b]).style.left);
+				yCbul[b] = parseInt(document.getElementById(bullets[b]).style.top);
+				xCai[d] = parseInt(document.getElementById(arrayTanks[d]).style.left);
+				yCai[d] = parseInt(document.getElementById(arrayTanks[d]).style.top);
+				
+				if((xCbul[b] <= xCai[d] + 40) && (xCbul[b] >= xCai[d]) && ((yCbul[b] <= yCai[d] + 40) && (yCbul[b] + 10 >= yCai[d])) && alive[d] == 1){
+					lives[d] -= 1
+					bulletCoord[b] = 0
+					bulletSwitch[b] = 0
+					document.getElementById(bullets[b]).src = "blank.gif"
+				}
+				else if((xCbul[b] + 10 >= xCai[d]) && (xCbul[b] + 10 <= xCai[d] + 40) && ((yCbul[b] <= yCai[d] + 40) && (yCbul[b] + 10 >= yCai[d])) && alive[d] == 1){
+					lives[d] -= 1
+					bulletCoord[b] = 0
+					bulletSwitch[b] = 0
+					document.getElementById(bullets[b]).src = "blank.gif"
+				}
+				else if((xCbul[b] + 10 >= xCai[d]) && (xCbul[b] <= xCai[d] + 40) && ((yCbul[b] <= yCai[d] + 40) && yCbul[b] >= yCai[d]) && alive[d] == 1){
+					lives[d] -= 1
+					bulletCoord[b] = 0
+					bulletSwitch[b] = 0
+					document.getElementById(bullets[b]).src = "blank.gif"
+				}
+				else if((xCbul[b] + 10 >= xCai[d]) && (xCbul[b] <= xCai[d] + 40) && ((yCbul[b] + 10 >= yCai[d]) && (yCbul[b] <= yCai[d] + 40)) && alive[d] == 1){
+					lives[d] -= 1
+					bulletCoord[b] = 0
+					bulletSwitch[b] = 0
+					document.getElementById(bullets[b]).src = "blank.gif"
+				}
+				
+				if(lives[d] == 0){
+					alive[d] = 0
+					document.getElementById(arrayTanks[d]).src = "blank.gif"
+				}
+				
+				
+			}
+	
+		}
+
+}
+
+</script>
+</head>
+<body onkeypress="keyFunction(event)">
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+<center>
+<table width="800px">
+<tr>
+<td>
+<center>
+<h1><img src="heading.jpg"></h1>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self">Sophmore</a></li>
+	<li><a href="sophmore2.htm" target="_self"><span class="tag">Sophmore 2nd</span></a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign16.htm" target="_self">BallOne</a></li>
+	<li><a href="assign17.htm" target="_self">BallFive</a></li>
+	<li><a href="assign18.htm" target="_self">Fish</a></li>
+	<li><a href="assign19.htm" target="_self"><span class="tag">Tank</span></a></li>
+	<li><a href="assign20.htm" target="_self">Digital Profile</a></li>
+</ul>
+</td>
+</tr>
+</table>
+<br>
+<input type="button" value="Start" onclick="TimerTank()">
+
+<img src="tankrightPlayer.jpg" id="player" style="position:absolute; top:500; left:300">
+<img src="tankleft.jpg" id="ai1" style="position:absolute; top:500; left:1000">
+<img src="tankleft.jpg" id="ai2" style="position:absolute; top:580; left:800">
+<img src="tankleft.jpg" id="ai3" style="position:absolute; top:300; left:900">
+<img src="tankleft.jpg" id="ai4" style="position:absolute; top:450; left:600">
+<img src="tankleft.jpg" id="ai5" style="position:absolute; top:400; left:700">
+<img src="bullet.jpg" id="bulletOne" style="position:absolute; top:800; left;2000">
+<img src="bullet.jpg" id="bulletTwo" style="position:absolute; top:800; left;2000">
+<img src="bullet.jpg" id="bulletThree" style="position:absolute; top:800; left;2000">
+<img src="bullet.jpg" id="bulletFour" style="position:absolute; top:800; left;2000">
+<img src="bullet.jpg" id="bulletFive" style="position:absolute; top:800; left;2000">
+<img src="bullet.jpg" id="bulletSix" style="position:absolute; top:800; left;2000">
+
+<table align="left">
+<tr>
+<td>
+<b>WASD to move; J to shoot</b>
+</td>
+</tr>
+<br>
+<tr>
+<td>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+</td>
+</tr>
+</table>
+
+</center>
+</td>
+</tr>
+</table>
+
+</center>
+
+</body>
+
+</html>

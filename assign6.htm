@@ -1,0 +1,164 @@
+<html>
+<head>
+<title>
+Madlibs
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+td{color:white; font-family:arial;}
+.output{background-attachment:fixed; background-repeat:no-repeat;}
+
+html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+
+</style>
+
+
+<script language="javascript">
+function madlibsWords(name1, noun1, verb1, verb2, verb3, adverb1, noun2, 
+verb4, adjective1, adjective2, noun3, verb5, adjective3, adjective4, verb6){
+madlibsStory=window.open("","aWindow","height=400", "width=800", 
+"left=0", "top=0", "scrollbars", "resizeable", "menubar", 
+"toolbar");
+madlibsStory.document.write("<body background='monster.jpg' class='output'>")
+madlibsStory.document.write("</br></br><div style='font-size:20px; font-weight:bold; font-family:arial; color:black'>My name is " + name1 + ". ");
+madlibsStory.document.write("I am a " + noun1 + " who " + verb1 + " and " + verb2 + ". ");
+madlibsStory.document.write("I " + verb3 + " a fruit " + adverb1 + ". ");
+madlibsStory.document.write("A " + noun2 + " steals my fruit! I " + verb4 + " it to get it back! ");
+madlibsStory.document.write("The thing is " + adjective1 + " and " + adjective2 + ". ");
+madlibsStory.document.write("I gave the thing a " + noun3 + ". ");
+madlibsStory.document.write("The thing gets really " + verb5 + " at the gift. ")
+madlibsStory.document.write("The gift was " + adjective3 + " and " + adjective4 + ". ")
+madlibsStory.document.write("The monster and I went to " + verb6 + " together as friends.</div>")
+madlibsStory.document.write("</br></br><center><img src='fruit.gif' width='120px'></center>")
+}
+</script>
+
+</head>
+
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+
+<center>
+
+<table width="800px">
+<tr>
+<td>
+<center>
+
+<h1><img src="heading.jpg"></h1>
+
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self"><span class="tag">Sophmore</span></a></li>
+   <li><a href="sophmore2.htm" target="_self">Sophmore 2nd</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign1.htm" target="_self">Facebook</a></li>
+	<li><a href="assign2.htm" target="_self">September Calendar</a></li>
+	<li><a href="assign3.htm" target="_self">Tech Page</a></li>
+	<li><a href="assign5.htm" target="_self">Poster</a></li>
+	<li><a href="assign6.htm" target="_self"><span class="tag">Madlibs</span></a></li>
+	<li><a href="assign8.htm" target="_self">Book Sales</a></li>
+	<li><a href="assign9.htm" target="_self">Rolling Die</a></li>
+	<li><a href="assign10.htm" target="_self">Craps!</a></li>
+	<li><a href="assign11.htm" target="_self">Fish</a></li>
+	<li><a href="assign12.htm" target="_self">Fish2D</a></li>
+	<li><a href="assign13.htm" target="_self">Shark2D</a></li>
+	<li><a href="assign14.htm" target="_self">Tic-Tac-Toe</a></li>
+	<li><a href="assign15.htm" target="_self">HighLow</a></li>
+</ul>
+</td>
+</tr>
+</table>
+<br>
+<br>
+<div style="font-size=30px">
+The Thing And The Fruit
+</div>
+</br>
+<form name="madlibs">
+
+<input type="text" name="txtName" value="What's your name?" size="50">
+</br>
+<input type="text" name="txtNoun1" value="What are you?" size="50">
+</br>
+<input type="text" name="txtVerb" value="What do you do?" size="50">
+</br>
+<input type="text" name="txtVerb2" value="What else do you do?" size="50">
+</br>
+<input type="text" name="txtVerb3" value="What do you do to a fruit?" size="50">
+</br>
+<input type="text" name="txtAdverb1" value="Do you do the verb quickly or slowly?" size="50">
+</br>
+<input type="text" name="txtNoun2" value="Who takes your fruit?" size="50">
+</br>
+<input type="text" name="txtVerb4" value="What do you do to get it?" size="50">
+</br>
+<input type="text" name="txtAdjective1" value="What does the thing look like?" size="50">
+</br>
+<input type ="text" name="txtAdjective2" value="What does the thing look like?" size="50">
+</br>
+<input type="text" name="txtNoun3" value="What do you give to the thing?" size="50">
+</br>
+<input type="text" name="txtVerb5" value="How does he react?" size="50">
+</br>
+<input type="text" name="txtAdjective3" value="What does the object look like?" size="50">
+</br>
+<input type="text" name="txtAdjective4" value="What does the object look like?"  size="50">
+</br>
+<input type="text" name="txtVerb6" value="What do you do with the thing at the end?"  size="50">
+
+
+</form>
+
+</br>
+
+<div style="font-size: 20px; color:red; font-family:arial; cursor:hand;"
+	 onclick="madlibsWords(madlibs.txtName.value, madlibs.txtNoun1.value,
+	 madlibs.txtVerb.value, madlibs.txtVerb2.value, madlibs.txtVerb3.value, 
+	 madlibs.txtAdverb1.value, madlibs.txtNoun2.value, madlibs.txtVerb4.value, 
+	 madlibs.txtAdjective1.value, madlibs.txtAdjective2.value, madlibs.txtNoun3.value,
+	 madlibs.txtVerb5.value, madlibs.txtAdjective3.value, madlibs.txtAdjective4.value, 
+	 madlibs.txtVerb6.value)">
+Click
+</div> 
+
+</center>
+<br>
+<br>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+School Address: 789 Wildcat Way Brea, California 92821 
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

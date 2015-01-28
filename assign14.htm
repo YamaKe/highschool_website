@@ -1,0 +1,297 @@
+<html>
+<head>
+<title>
+Tic-Tac-Toe
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+.tictactoe{border-width: 5px; border-style:solid; border-color:red}
+.td{border-width: 4px; border-style:solid; border-color:limegreen; color:white;}
+.white{color:white}
+
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+	
+</style>
+
+<script language="javascript">
+var totalMove = 0*0;
+var playerX = 0*0;
+
+var board = new Array(
+	new Array("ai", "ai2", "ai3"),
+	new Array("ai4", "ai5", "ai6"),
+	new Array("ai7", "ai8", "ai9")
+);
+
+var boardPosition = new Array(
+	new Array(0, 0, 0),
+	new Array(0, 0, 0),
+	new Array(0, 0, 0)
+);
+
+function clear(){
+
+	for(var a=0;a<3;a++){
+	
+	for(var b=0;b<3;b++){
+	document.getElementById(board[a][b]).src="blank(2).jpg";
+	boardPosition[a][b] = 0;
+	playerX = 0;
+	totalMove = 0;
+	}
+	
+	}
+	
+}
+
+function game(x, y){
+
+	if(boardPosition[y][x] == 0){
+		if(playerX == 0){
+			document.getElementById(board[y][x]).src="picX.jpg";
+			boardPosition[y][x] = 1;
+			playerX = 1
+			totalMove += 1
+		}
+		else if(playerX == 1){
+			document.getElementById(board[y][x]).src="picO.jpg";
+			boardPosition[y][x] = 2;
+			playerX = 0
+			totalMove += 1
+		}
+	}
+	
+	if(boardPosition[0][0] == 1 && boardPosition[1][0] == 1 && boardPosition[2][0] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[0][1] == 1 && boardPosition[1][1] == 1 && boardPosition[2][1] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[0][2] == 1 && boardPosition[1][2] == 1 && boardPosition[2][2] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[0][0] == 1 && boardPosition[0][1] == 1 && boardPosition[0][2] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[1][0] == 1 && boardPosition[1][1] == 1 && boardPosition[1][2] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[2][0] == 1 && boardPosition[2][1] == 1 && boardPosition[2][2] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[0][0] == 1 && boardPosition[1][1] == 1 && boardPosition[2][2] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	else if(boardPosition[0][2] == 1 && boardPosition[1][1] == 1 && boardPosition[2][0] == 1){
+		alert("Player X Wins!");
+		clear()
+	}
+	
+	
+	if(boardPosition[0][0] == 2 && boardPosition[1][0] == 2 && boardPosition[2][0] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[0][1] == 2 && boardPosition[1][1] == 2 && boardPosition[2][1] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[0][2] == 2 && boardPosition[1][2] == 2 && boardPosition[2][2] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[0][0] == 2 && boardPosition[0][1] == 2 && boardPosition[0][2] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[1][0] == 2 && boardPosition[1][1] == 2 && boardPosition[1][2] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[2][0] == 2 && boardPosition[2][1] == 2 && boardPosition[2][2] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[0][0] == 2 && boardPosition[1][1] == 2 && boardPosition[2][2] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	else if(boardPosition[0][2] == 2 && boardPosition[1][1] == 2 && boardPosition[2][0] == 2){
+		alert("Player O Wins!");
+		clear()
+	}
+	
+	if(totalMove == 9){
+		alert("Cat's Game!")
+		clear()
+	}
+}
+
+</script>
+</head>
+
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+
+<center>
+
+<table width="800px">
+<tr>
+<td>
+<center>
+<h1><img src="heading.jpg"></h1>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self"><span class="tag">Sophmore</span></a></li>
+   <li><a href="sophmore2.htm" target="_self">Sophmore 2nd</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign1.htm" target="_self">Facebook</a></li>
+	<li><a href="assign2.htm" target="_self">September Calendar</a></li>
+	<li><a href="assign3.htm" target="_self">Tech Page</a></li>
+	<li><a href="assign5.htm" target="_self">Poster</a></li>
+	<li><a href="assign6.htm" target="_self">Madlibs</a></li>
+	<li><a href="assign8.htm" target="_self">Book Sales</a></li>
+	<li><a href="assign9.htm" target="_self">Rolling Die</a></li>
+	<li><a href="assign10.htm" target="_self">Craps!</a></li>
+	<li><a href="assign11.htm" target="_self">Fish</a></li>
+	<li><a href="assign12.htm" target="_self">Fish2D</a></li>
+	<li><a href="assign13.htm" target="_self">Shark2D</a></li>
+	<li><a href="assign14.htm" target="_self"><span class="tag">Tic-Tac-Toe</span></a></li>
+	<li><a href="assign15.htm" target="_self">HighLow</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<br>
+<br>
+
+<table class="tictactoe" cellpadding="2">
+<tr>
+<td align="center">
+
+</td>
+<td align="center" class="td">
+0
+</td>
+<td align="center" class="td">
+1
+</td>
+<td align="center" class="td">
+2
+</td>
+</tr>
+<tr>
+<td class="td">
+0
+</td>
+<td>
+<img id="ai" height="90" src="blank(2).jpg" 
+onclick="inputForm.xCoord.value = 0, inputForm.yCoord.value = 0">
+</td>
+<td>
+<img id="ai2" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 1, inputForm.yCoord.value = 0">
+</td>
+<td>
+<img id="ai3" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 2, inputForm.yCoord.value = 0">
+</td>
+</tr>
+<tr>
+<td class="td">
+1
+</td>
+<td>
+<img id="ai4" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 0, inputForm.yCoord.value = 1">
+</td>
+<td>
+<img id="ai5" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 1, inputForm.yCoord.value = 1">
+</td>
+<td>
+<img id="ai6" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 2, inputForm.yCoord.value = 1">
+</td>
+</tr>
+<tr>
+<td class="td">
+2
+</td>
+<td>
+<img id="ai7" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 0, inputForm.yCoord.value = 2">
+</td>
+<td>
+<img id="ai8" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 1, inputForm.yCoord.value = 2">
+</td>
+<td>
+<img id="ai9" height="90" src="blank(2).jpg"
+onclick="inputForm.xCoord.value = 2, inputForm.yCoord.value = 2">
+</td>
+</tr>
+</table>
+
+<form name="inputForm">
+<span class="white">X-Coordinate:</span>  
+<input type="text" name="xCoord" value=""/>
+</br>
+<span class="white">Y-Coordinate:  </span>
+
+<input type="text" name="yCoord" value=""/>
+
+</br>
+<input type="button" value="Confirm" onclick="game(
+inputForm.xCoord.value, inputForm.yCoord.value)"/>
+
+</form>
+</center>
+<br>
+<br>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+School Address: 789 Wildcat Way Brea, California 92821 
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

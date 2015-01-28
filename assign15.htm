@@ -1,0 +1,268 @@
+<html>
+<head>
+<title>
+Arrays
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+td{color:white; font-family:arial;}
+
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+	
+</style>
+<script language="javascript">
+
+function forLoop(){
+
+//declare arrays
+var array = new Array(10);
+var orderedArray = new Array(10);
+
+//set variables
+var order = -1*1;
+var stop = 0*0;
+var y = 0*0;
+var x = 0*0;
+
+var output1 = "";
+var highestNum = 0*0;
+var lowestNum = 0*0;
+var sum = 0*0;
+var start = 0*0;
+var averageNum = 0*0;
+
+//creating rows and cols
+for(var a=0; a<10; a++){
+
+	array[a] = new Array(10);
+
+}
+
+for(var a=0; a<10; a++){
+	
+	orderedArray[a] = new Array(10);
+	
+}
+
+
+//generating random numbers
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+		array[a][b] = Math.round(Math.random()*100);
+		orderedArray[a][b] = -1;
+	}
+
+}
+
+//determines highest, lowest, and average
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+		if(start == 0){
+			highestNum = array[a][b];
+			lowestNum = array[a][b];
+			start = 1;
+		}
+		if(array[a][b] > highestNum){
+			highestNum = array[a][b];
+		}
+		
+		if(array[a][b] < lowestNum){
+			lowestNum = array[a][b];
+		}
+		
+		sum += array[a][b]
+		
+		document.getElementById("sum").innerHTML = "Sum: " + sum;
+		document.getElementById("high").innerHTML = "Highest: " + highestNum;
+		document.getElementById("low").innerHTML = "Lowest: " + lowestNum;
+	}
+
+}
+
+averageNum = sum/100;
+document.getElementById("average").innerHTML = "Average: " + averageNum
+
+
+//orders the numbers from highest to lowest
+for(var i=0; i<100; i++){
+
+//order gets the value of first valid array space
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+	
+		if(array[a][b] > -1 && order == -1){
+			order = array[a][b];
+		}
+	
+	}
+
+}
+
+//order switches to a lower number if found
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+	
+		if(array[a][b] > -1 && array[a][b] <= order){
+			order = array[a][b]
+			y = a
+			x = b
+		}
+		
+	}
+
+}
+
+//switches the array space used to an invalid number
+array[y][x] = -1
+
+//inputs the order value into 2nd array
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+		
+		if(orderedArray[a][b] == -1 && stop == 0){
+			orderedArray[a][b] = order
+			stop = 1
+		}
+	
+	}
+
+}
+
+//resets variables
+order = -1
+stop = 0
+y = 0
+x = 0
+}
+
+//outputs
+for(var a=0; a<10; a++){
+	for(var b=0; b<10; b++){
+	output1 = output1 + orderedArray[a][b] + ", ";
+	}
+output1 = output1 + "\n";
+}
+
+document.outputForm.txaoutput1.value = output1
+
+}
+
+</script>
+
+</head>
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+
+<center>
+<table width="800px">
+<tr>
+<td>
+<center>
+
+<h1><img src="heading.jpg"></h1>
+
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self"><span class="tag">Sophmore</span></a></li>
+   <li><a href="sophmore2.htm" target="_self">Sophmore 2nd</a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign1.htm" target="_self">Facebook</a></li>
+	<li><a href="assign2.htm" target="_self">September Calendar</a></li>
+	<li><a href="assign3.htm" target="_self">Tech Page</a></li>
+	<li><a href="assign5.htm" target="_self">Poster</a></li>
+	<li><a href="assign6.htm" target="_self">Madlibs</a></li>
+	<li><a href="assign8.htm" target="_self">Book Sales</a></li>
+	<li><a href="assign9.htm" target="_self">Rolling Die</a></li>
+	<li><a href="assign10.htm" target="_self">Craps!</a></li>
+	<li><a href="assign11.htm" target="_self">Fish</a></li>
+	<li><a href="assign12.htm" target="_self">Fish2D</a></li>
+	<li><a href="assign13.htm" target="_self">Shark2D</a></li>
+	<li><a href="assign14.htm" target="_self">Tic-Tac-Toe</a></li>
+	<li><a href="assign15.htm" target="_self"><span class="tag">HighLow</span></a></li>
+	</ul>
+</td>
+</tr>
+</table>
+</br>
+
+
+<table align="center">
+<tr>
+<td>
+<form name="inputForm">
+<input type="button" name="btnPush" value="Push" onclick="forLoop()"/>
+</form>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td>
+<form name="outputForm">
+<font size="1000px">
+<textarea name="txaoutput1" rows="20" cols="45">
+</textarea>
+</font>
+</form>
+</td>
+</tr>
+</table>
+
+<table border="5px" cellpadding="10px">
+<tr>
+<td id="high">
+
+</td>
+<td id="low">
+
+</td>
+<td id="sum">
+
+</td>
+<td id="average">
+
+</td>
+</tr>
+</table>
+</center>
+
+<br>
+<br>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+School Address: 789 Wildcat Way Brea, California 92821 
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

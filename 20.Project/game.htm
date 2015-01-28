@@ -1,0 +1,1767 @@
+<html>
+<head>
+<title>
+Dungeon Raid
+</title>
+<style type="text/css">
+div.corners{
+	background-color: white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:500
+	
+	}
+
+div.corners2{
+	background-color:white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:100;
+	
+}	
+
+table.left{
+	position:relative;
+}
+table.right{
+	position:relative;
+}
+
+</style>
+
+<script language="javascript">
+
+
+//
+//
+//WARNING Game can run in firefox and IE.
+//HOWEVER it is very very very LAGGY and SLOW.
+//It will seem broken, but the game will be trying to load all the necessary components.
+//You will have a better experience in GOOGLE CHROME.
+//
+//
+//WASD to move
+//F to attack
+//Space to clear right side lines
+//
+//
+//Objective: Kill enemies until you reach level 10
+//Get the sword at level 10
+//Click the NEXT LEVEL button on the left side
+//
+//
+//On the bottom, there is a creater button.
+//The button levels the character up.
+//
+
+
+
+//set arrays for images for monsters, players
+var images = new Array("ai1","ai2","ai3","ai4","ai5","ai6","ai7","ai8","ai9","ai10","pl1");
+//set arrays for images of platforms
+var platforms = new Array("plat1", "plat2");
+//set arrays for images of stats
+var statsImages = new Array("ai1s","ai2s","ai3s","ai4s","ai5s","ai6s","ai7s","ai8s","ai9s","ai10s","pl1s");
+
+//set array for icon images
+var icons = new Array(
+	new Array("1td1","1td2","1td3","1td4","1td5","1td6"),
+	new Array("2td1","2td2","2td3","2td4","2td5","2td6"),
+	new Array("3td1","3td2","3td3","3td4","3td5","3td6"),
+	new Array("4td1","4td2","4td3","4td4","4td5","4td6"),
+	new Array("5td1","5td2","5td3","5td4","5td5","5td6"),
+	new Array("6td1","6td2","6td3","6td4","6td5","6td6")
+	
+);
+
+//set array for stat value
+var statsValue = new Array(0,0,0,0,0,0,0,0,0,0,0);
+
+//set iconnumber array, determines what the icon is
+var iconsNumber = new Array(
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0)
+
+);
+
+//set iconchosen array, determines which icons are chosen
+var iconsChosen = new Array(
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0),
+	new Array(0,0,0,0,0,0)
+);
+
+//variable for movement
+var keys;
+
+//number holds the first icon value in the right side
+var number = 5*1
+
+
+//loads times at the start of the game
+window.onload = new function(){
+	setInterval("gravity()",1000/60);
+
+	setInterval("jump()",1000/60);
+
+	setInterval("move()",1000/60);
+	
+	setInterval("enemyMove()",1000/20);
+	
+	setInterval("stats()",1000/60);
+}
+
+
+//object for enemies with attributes
+function enemies(xE,yE,velxE,velyE,aliveE,hpE,dir,floor){
+	this.xE = xE;
+	this.yE = yE;
+	this.velxE = velxE;
+	this.velyE = velyE;
+	this.aliveE = aliveE;
+	this.hpE = hpE;
+	this.dir = dir;
+	this.floor = floor;
+}
+
+//object for player with attributes
+function player(x,y,velx,vely,alive,hp,dam,level){
+	this.x = x;
+	this.y = y;
+	this.velx = velx;
+	this.vely = vely;
+	this.alive = alive;
+	this.hp = hp;
+	this.dam = dam;
+	this.level = level;
+}
+
+//object for platforms
+function plat(xP,yP){
+	this.xP = xP;
+	this.yP = yP;
+}
+
+
+//variables for player
+var x = 1*1;
+var y = 1*1;
+
+//variables for enemy
+var xE = 1*1;
+var yE = 1*1;
+
+//variables for platform
+var xP = 1*1;
+var yP = 1*1;
+
+
+//enemy array
+//gives enemies their attributes
+var enemiesArray = new Array();
+
+for(var i=0;i<6;i++){
+	enemiesArray[i] = new enemies(xE,yE,0,0,1,20,0,1)
+}
+for(var j=6;j<10;j++){
+	enemiesArray[j] = new enemies(xE,yE,0,0,1,20,0,0)
+}
+
+//sets player level
+player.level = 1;
+
+//variables to turn gravity and jump off and on
+var gravityEnable = 1*1;
+var jumpEnable = 0*1;
+
+var aKeyValue = 0*1;
+var dKeyValue = 0*1;
+
+//for jumping and going through platforms
+var jumpNumber = 0*1;
+var allowDown = 0*1;
+
+//determines direction of character
+var direction = 0*1;
+
+//variables to turn gravity and jump off and on
+var gravityEnable = 1*1;
+var jumpEnable = 0*1;
+
+var aKeyValue = 0*1;
+var dKeyValue = 0*1;
+
+//for jumping and going through platforms
+var jumpNumber = 0*1;
+var allowDown = 0*1;
+
+//determines direction of character
+var direction = 0*1;
+
+//row and column variables
+var r = 0*1;
+var c = 0*1;
+
+//variables for the previous row and column
+var prevr = 0*1;
+var prevc = 0*1;
+
+//variable for length of the line on the right side
+var length = 0*1;
+
+//variable to switch from selecting to finishing
+var selectFinish = 0*1;
+
+
+//variables for player health
+var heart = 100;
+var maxheart = 5000;
+
+//variables for player shield
+var shield = 20;
+var maxshield = 20;
+
+//variables for experience points, coins, and whether or not she as a sword
+var exp = 0*1;
+var coin = 0*1;
+var sword = 0*1;
+
+//upgrade for shield
+function shieldup(){
+	if(coin > 50){
+		coin -= 50;
+		maxshield += 10;
+	}
+}
+//upgrade for health regen
+function regenup(){
+	if(coin > 25){
+		coin -= 25;
+		heart += 25;
+	}
+}
+
+
+function stats(){
+
+	for(a=0;a<10;a++){
+		//variables to hold enemy coordinates
+		enemiesArray[a].xE = parseInt(document.getElementById(images[a]).style.left);
+		enemiesArray[a].yE = parseInt(document.getElementById(images[a]).style.top);
+		
+		//depending on the stat value, the enemies have different life indicators over their heads
+		if(statsValue[a] == 0){
+			document.getElementById(statsImages[a]).src = "20life.png"
+		}
+		else if(statsValue[a] == 1){
+			document.getElementById(statsImages[a]).src = "15life.png"
+		}
+		else if(statsValue[a] == 2){
+			document.getElementById(statsImages[a]).src = "10life.png"
+		}
+		else if(statsValue[a] == 3){
+			document.getElementById(statsImages[a]).src = "5life.png"
+		}
+		
+		//sets the stat image above their heads
+		document.getElementById(statsImages[a]).style.left = enemiesArray[a].xE;
+		document.getElementById(statsImages[a]).style.top = enemiesArray[a].yE - 30;
+		
+	}
+	
+	
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//if player has no sword, 5 damage
+	//if player has sword, 10 damage
+	//stat indicators
+	if(statsValue[10] == 1){
+		document.getElementById(statsImages[10]).src = "5damagep.png";
+	}
+	else if(statsValue[10] == 2){
+		document.getElementById(statsImages[10]).src = "10damagep.png";
+	}
+	
+	//sets the stat image above the player
+	document.getElementById(statsImages[10]).style.left = player.x;
+	document.getElementById(statsImages[10]).style.top = player.y - 30;
+		
+	//without the sword, the damage is 5
+	//with the sword the damage is 10
+	//places sword based on direction
+	if(sword == 0){
+		player.dam = 5;
+	}
+	else if(sword == 1){
+		player.dam = 10;
+		if(direction == 0){
+			document.getElementById("sword").style.left = player.x - 60;
+			document.getElementById("sword").style.top = player.y
+			
+		}
+		else if(direction == 1){
+			document.getElementById("sword").style.left = player.x + 30;
+			document.getElementById("sword").style.top = player.y
+			
+		}
+	}
+	
+	
+	if(player.dam == 5){
+		statsValue[10] = 1;
+	}
+	else if(player.dam == 10){
+		statsValue[10] = 2;
+	}
+	
+	//variables for the sword upgrade icon on the map
+	var swordUpgradeX = parseInt(document.getElementById("swordupgrade").style.left);
+	var swordUpgradeY = parseInt(document.getElementById("swordupgrade").style.top);
+	
+	
+	//if the player is higher than 10, she is able to get the sword for more damage
+	if(player.level >= 10){
+		if(player.x <= swordUpgradeX + 50 && player.x >= swordUpgradeX && player.y >= swordUpgradeY - 20 && player.y + 50 <= swordUpgradeY + 70){
+			sword = 1;
+			document.getElementById("swordupgrade").src = "blank.gif"
+			document.getElementById("nxt").disabled = false;
+			
+		}
+	}
+	
+	//sets the different bars on the bottom of the page based on value
+	if(exp == 0){
+		document.getElementById("exps").src = "xpbar0.gif";
+	}
+	else if(exp > 0 && exp <= 10){
+		document.getElementById("exps").src = "xpbar1.gif";
+	}
+	else if(exp > 10 && exp <= 20){
+		document.getElementById("exps").src = "xpbar2.gif";
+	}
+	else if(exp > 20 && exp <= 30){
+		document.getElementById("exps").src = "xpbar3.gif";
+	}
+	else if(exp > 30 && exp <= 40){
+		document.getElementById("exps").src = "xpbar4.gif";
+	}
+	else if(exp > 40 && exp <= 50){
+		document.getElementById("exps").src = "xpbar5.gif";
+	}
+	else if(exp > 50 && exp <= 60){
+		document.getElementById("exps").src = "xpbar6.gif";
+	}
+	else if(exp > 60 && exp <= 70){
+		document.getElementById("exps").src = "xpbar7.gif";
+	}
+	else if(exp > 70 && exp <= 80){
+		document.getElementById("exps").src = "xpbar8.gif";
+	}
+	else if(exp > 80 && exp <= 90){
+		document.getElementById("exps").src = "xpbar9.gif";
+	}
+	else if(exp > 90 && exp < 100){
+		document.getElementById("exps").src = "xpbar.gif";
+	}
+	//when leveling, health is regenerated and max health is increased
+	else if(exp >= 100){
+		document.getElementById("exps").src = "xpbar0.gif";
+		exp = 0;
+		maxheart += 20;
+		hearts += 30
+		if(hearts>maxheart){
+			hearts = maxheart
+		}
+		player.level += 1;
+	}
+	
+	if(coin == 0){
+		document.getElementById("coins").src = "coinbar0.gif"
+	}
+	else if(coin > 0 && coin <= 10){
+		document.getElementById("coins").src = "coinbar1.gif"
+	}
+	else if(coin > 10 && coin <= 20){
+		document.getElementById("coins").src = "coinbar2.gif"
+	}
+	else if(coin > 20 && coin <= 30){
+		document.getElementById("coins").src = "coinbar3.gif"
+	}
+	else if(coin > 30 && coin <= 40){
+		document.getElementById("coins").src = "coinbar4.gif"
+	}
+	else if(coin > 40 && coin <= 50){
+		document.getElementById("coins").src = "coinbar5.gif"
+	}
+	else if(coin > 50 && coin <= 60){
+		document.getElementById("coins").src = "coinbar6.gif"
+	}
+	else if(coin > 60 && coin <= 70){
+		document.getElementById("coins").src = "coinbar7.gif"
+	}
+	else if(coin > 70 && coin <= 80){
+		document.getElementById("coins").src = "coinbar8.gif"
+	}
+	else if(coin > 80 && coin <=90){
+		document.getElementById("coins").src = "coinbar9.gif"
+	}
+	else if(coin > 90 && coin <= 100){
+		document.getElementById("coins").src = "coinbar.gif"
+	}
+	
+	
+	if(shield == 0){
+		document.getElementById("shields").src = "shieldbar0.gif"
+	}
+	else if(shield > 0 && shield <= 10){
+		document.getElementById("shields").src = "shieldbar1.gif"
+	}
+	else if(shield > 10 && shield <= 20){
+		document.getElementById("shields").src = "shieldbar2.gif"
+	}
+	else if(shield > 20 && shield <= 30){
+		document.getElementById("shields").src = "shieldbar3.gif"
+	}
+	else if(shield > 30 && shield <= 40){
+		document.getElementById("shields").src = "shieldbar4.gif"
+	}
+	else if(shield > 40 && shield <= 50){
+		document.getElementById("shields").src = "shieldbar5.gif"
+	}
+	else if(shield > 50 && shield <= 60){
+		document.getElementById("shields").src = "shieldbar6.gif"
+	}
+	else if(shield > 60 && shield <= 70){
+		document.getElementById("shields").src = "shieldbar7.gif"
+	}
+	else if(shield > 70 && shield <= 80){
+		document.getElementById("shields").src = "shieldbar8.gif"
+	}
+	else if(shield > 80 && shield <=90){
+		document.getElementById("shields").src = "shieldbar9.gif"
+	}
+	else if(shield > 90 && shield <= 100){
+		document.getElementById("shields").src = "shieldbar.gif"
+	}
+
+	if(heart == 0){
+		document.getElementById("hearts").src = "heartbar0.gif"
+	}
+	else if(heart > 0 && heart <= 10){
+		document.getElementById("hearts").src = "heartbar1.gif"
+	}
+	else if(heart > 10 && heart <= 20){
+		document.getElementById("hearts").src = "heartbar2.gif"
+	}
+	else if(heart > 20 && heart <= 30){
+		document.getElementById("hearts").src = "heartbar3.gif"
+	}
+	else if(heart > 30 && heart <= 40){
+		document.getElementById("hearts").src = "heartbar4.gif"
+	}
+	else if(heart > 40 && heart <= 50){
+		document.getElementById("hearts").src = "heartbar5.gif"
+	}
+	else if(heart > 50 && heart <= 60){
+		document.getElementById("hearts").src = "heartbar6.gif"
+	}
+	else if(heart > 60 && heart <= 70){
+		document.getElementById("hearts").src = "heartbar7.gif"
+	}
+	else if(heart > 70 && heart <= 80){
+		document.getElementById("hearts").src = "heartbar8.gif"
+	}
+	else if(heart > 80 && heart <=90){
+		document.getElementById("hearts").src = "heartbar9.gif"
+	}
+	else if(heart > 90){
+		document.getElementById("hearts").src = "heartbar.gif"
+	}
+	
+	//if player health is less than 0, the player dies
+	if(heart < 0){
+		alert("You Died.")
+		parent.location = "intro.htm"
+	}
+
+	//puts number values for the each bar for easier understanding
+	document.getElementById("outputhearts").innerHTML = Math.round(heart);
+	document.getElementById("outputxps").innerHTML = exp;
+	document.getElementById("outputshields").innerHTML = Math.round(shield);
+	document.getElementById("outputcoins").innerHTML = coin;
+	document.getElementById("outputlevel").innerHTML = player.level;
+}
+
+function placeIcons(){
+
+	for(row=0;row<6;row++){
+		for(col=0;col<6;col++){
+			
+			//places icons based on probability and randomization
+			var probability = 0*1;
+			
+			probability = Math.floor(Math.random() * 99);
+			
+			if(probability >= 0 && probability <= 19){
+				iconsNumber[row][col] = 0;
+				document.getElementById(icons[row][col]).src = "coin.gif";
+			}
+			else if(probability >= 20 && probability <= 39){
+				iconsNumber[row][col] = 1;
+				document.getElementById(icons[row][col]).src = "potion.gif";
+			}
+			else if(probability >= 40 && probability <= 59){
+				iconsNumber[row][col] = 2;
+				document.getElementById(icons[row][col]).src = "shield.gif";
+			}
+			else if(probability >= 60 && probability <= 89){
+				iconsNumber[row][col] = 3;
+				document.getElementById(icons[row][col]).src = "sword.gif";
+			}
+			else if(probability >= 90 && probability <= 99){
+				iconsNumber[row][col] = 4;
+				document.getElementById(icons[row][col]).src = "skull.gif";
+			}
+			
+		
+		}
+	
+	}
+
+}
+
+function select(first){
+	//for selecting
+	if(selectFinish == 0){
+		//gets first value
+		//makes first icon glow
+		number = first;
+		selectFinish = 1;
+		prevr = r;
+		prevc = c;
+		if(number == 0){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "coinG.gif"
+		}
+		else if(number == 1){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "potionG.gif"
+		}
+		else if(number == 2){
+			iconsChosen[r][c] = 1;
+			document.getElementById(icons[r][c]).src = "shieldG.gif"
+		}
+		else if(number == 3 || number == 4){
+			iconsChosen[r][c] = 1;
+			if(number == 3){
+			document.getElementById(icons[r][c]).src = "swordG.gif"
+			}
+			else if(number == 4){
+			document.getElementById(icons[r][c]).src = "skullG.gif"
+			}
+		}
+		
+		//increases length
+		length += 1;
+		document.getElementById("value").innerHTML = first;
+	}
+	//for finishing a line
+	else if(selectFinish == 1 && length > 2){
+		for(a=0;a<6;a++){
+			for(b=0;b<6;b++){
+				
+				//different bonuses for different values
+				if(iconsChosen[a][b] == 1){
+					if(iconsNumber[a][b] == 0){
+						if(coin < 100){
+							coin += 2;
+						}
+					}
+					else if(iconsNumber[a][b] == 1){
+						if(heart < maxheart){
+							heart += 1;
+						}
+					}
+					else if(iconsNumber[a][b] == 4){
+						exp += 1;
+					}
+					else if(iconsNumber[a][b] == 2){
+						if(shield < maxshield){
+							shield += 2;
+						}
+					}
+					
+						 
+					document.getElementById(icons[a][b]).src = "blank.gif"
+					
+					//sets icons again after being chosen
+					var probability = 0*1;
+			
+					probability = Math.floor(Math.random() * 99);
+					
+					iconsChosen[a][b] = 0;
+					number = 5;
+					length = 0;
+					
+					if(probability >= 0 && probability <= 19){
+						iconsNumber[a][b] = 0;
+						document.getElementById(icons[a][b]).src = "coin.gif";
+					}
+					else if(probability >= 20 && probability <= 49){
+						iconsNumber[a][b] = 1;
+						document.getElementById(icons[a][b]).src = "potion.gif";
+					}
+					else if(probability >= 50 && probability <= 69){
+						iconsNumber[a][b] = 2;
+						document.getElementById(icons[a][b]).src = "shield.gif";
+					}
+					else if(probability >= 70 && probability <= 84){
+						iconsNumber[a][b] = 3;
+						document.getElementById(icons[a][b]).src = "sword.gif";
+					}
+					else if(probability >= 85 && probability <= 99){
+						iconsNumber[a][b] = 4;
+						document.getElementById(icons[a][b]).src = "skull.gif";
+					}
+					
+				}
+				
+				//if there is a skull on the board, the player is damaged
+				if(iconsNumber[a][b] == 4){
+					if(shield <= 0){
+						heart -= .5
+					}
+					else if(shield > 0){
+						shield -= .5
+					}
+				}
+
+			
+			}
+		}
+		selectFinish=0;
+	}
+	
+
+	
+}
+
+function over(next,row,col){
+	//for selecting by hovering over icons
+	r=row;
+	c=col;
+	if(iconsChosen[r][c] == 0){
+	//checks for adjacent icons
+	if((r == prevr + 1 && c == prevc) || (r == prevr - 1 && c == prevc) || 
+	(r == prevr && c == prevc + 1) || (r == prevr && c == prevc - 1) || 
+	(r == prevr + 1 && c == prevc + 1) || (r == prevr + 1 && c == prevc - 1) ||
+	(r == prevr - 1 && c == prevc + 1) || (r == prevr - 1 && c == prevc - 1)){
+		//if they are adjacent and have the same value, they are chosen
+		if(number == next){
+		if(number == 0){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "coinG.gif"
+		}
+		else if(number == 1){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "potionG.gif"
+		}
+		else if(number == 2){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "shieldG.gif"
+		}
+		else if(number == 3){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "swordG.gif"
+		}
+		else if(number == 4){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			document.getElementById(icons[r][c]).src = "skullG.gif"
+		}
+		
+		}
+		//skulls and swords can be chosen at the same time so the player can get rid of them
+		else if((number == 3 && next == 4) || (number == 4 && next == 3)){
+			iconsChosen[r][c] = 1;
+			length += 1;
+			prevr = r;
+			prevc = c;
+			if(next == 3){
+			document.getElementById(icons[r][c]).src = "swordG.gif"
+			}
+			else if(next == 4){
+			document.getElementById(icons[r][c]).src = "skullG.gif"
+			}
+		}
+		
+		
+	}
+	}
+	
+	document.getElementById("next").innerHTML = next;
+	
+
+}
+
+function enemyMove(){
+
+for(a=0;a<6;a++){
+//enemy is alive
+//movement
+if(enemiesArray[a].aliveE == 1){
+	//variables for enemy coordinates
+	enemiesArray[a].xE = parseInt(document.getElementById(images[a]).style.left);
+	enemiesArray[a].yE = parseInt(document.getElementById(images[a]).style.top);
+	
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//variables for platform coordinates
+	plat.xP = parseInt(document.getElementById(platforms[0]).style.left);
+	plat.yP = parseInt(document.getElementById(platforms[0]).style.top);
+	plat.xP2 = parseInt(document.getElementById(platforms[1]).style.left);
+	plat.yP2 = parseInt(document.getElementById(platforms[1]).style.top);
+	
+	//if player collides with enemy, the player is damaged
+	if(enemiesArray[a].xE < player.x + 35 && enemiesArray[a].xE > player.x && 
+	enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE +50 < player.y + 70){
+		enemiesArray[a].velxE = 0;
+		enemiesArray[a].dir = 3;
+		if(shield <= 0){
+			heart -= .30;
+		}
+		else if(shield > 0){
+			shield -= .30;
+		}
+		
+		document.getElementById(images[a]).src = "MonsterAttack.gif"
+		
+	}
+	else if(enemiesArray[a].xE + 50 > player.x - 5 && enemiesArray[a].xE + 50 < player.x + 30 && 
+	enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE + 50 < player.y + 70){
+		enemiesArray[a].velxE = 0;
+		enemiesArray[a].dir = 3;
+		if(shield <= 0){
+			heart -= .30;
+		}
+		else if(shield > 0){
+			shield -= .30;
+		}
+		document.getElementById(images[a]).src = "MonsterAttackRight.gif"
+		
+	
+	}
+	
+	//if the player is left or right of the enemy, the enemy moves accordingly
+	//if the player is above or below the enemy, the enemy will try to get to a portal or door to move up or down
+	
+	else if(player.y > enemiesArray[a].yE - 15 && player.y + 70 < enemiesArray[a].yE + 85){
+		if(player.x + 50 < enemiesArray[a].xE){
+			enemiesArray[a].velxE = -1;
+			enemiesArray[a].dir = 0;
+		}
+		else if(player.x > enemiesArray[a].xE){
+			enemiesArray[a].velxE = 1;
+			enemiesArray[a].dir = 1;
+		}
+	}
+	else if(player.y > enemiesArray[a].yE + 70){
+		if(enemiesArray[a].xE > 0 && enemiesArray[a].xE < 300){
+			enemiesArray[a].velxE = -1;
+			enemiesArray[a].dir = 0;
+		}
+		else if(enemiesArray[a].xE > 300 && enemiesArray[a].xE < 600){
+			enemiesArray[a].velxE = 1;
+			enemiesArray[a].dir = 1;
+		}
+		if(enemiesArray[a].xE > 530 || enemiesArray[a].xE < 30){
+			if(enemiesArray[a].floor == 2){
+				enemiesArray[a].floor = 1;
+				enemiesArray[a].yE = 230;
+				if(enemiesArray[a].xE > 530){
+					enemiesArray[a].xE = 490;
+				}
+				else if(enemiesArray[a].xE < 30){
+					enemiesArray[a].xE = 60;
+				}
+			}
+			else if(enemiesArray[a].floor == 1){
+				enemiesArray[a].floor = 0;
+				enemiesArray[a].yE = 360;
+				if(enemiesArray[a].xE > 530){
+					enemiesArray[a].xE = 490;
+				}
+				else if(enemiesArray[a].xE < 30){
+					enemiesArray[a].xE = 60;
+				}
+			}
+		}
+		
+		
+	}
+	else if(player.y < enemiesArray[a].yE){
+		if(enemiesArray[a].xE > 0 && enemiesArray[a].xE < 300){
+			enemiesArray[a].velxE = -1;
+			enemiesArray[a].dir = 0;
+		}
+		else if(enemiesArray[a].xE > 300 && enemiesArray[a].xE < 600){
+			enemiesArray[a].velxE = 1;
+			enemiesArray[a].dir = 1;
+		}
+		if(enemiesArray[a].xE > 530 || enemiesArray[a].xE < 30){
+			if(enemiesArray[a].floor == 1){
+				enemiesArray[a].floor = 2;
+				enemiesArray[a].yE = 80;
+				if(enemiesArray[a].xE > 530){
+					enemiesArray[a].xE = 490;
+				}
+				else if(enemiesArray[a].xE < 30){
+					enemiesArray[a].xE = 60;
+				}
+			}
+			else if(enemiesArray[a].floor == 0){
+				enemiesArray[a].floor = 1;
+				enemiesArray[a].yE = 230;
+				if(enemiesArray[a].xE > 530){
+					enemiesArray[a].xE = 490;
+				}
+				else if(enemiesArray[a].xE < 30){
+					enemiesArray[a].xE = 60;
+				}
+			}
+		}
+		
+		
+	}
+	
+	//if player is on the platform the enemies will swarm around it
+	if(player.x <= plat.xP + 84 && player.x + 50 >= plat.xP && player.y + 50 >= plat.yP && player.y + 50 <= plat.yP + 27){
+		if(player.x < enemiesArray[a].xE - 50){
+			enemiesArray[a].velx = 1;
+		}
+		else if(player.x > enemiesArray[a].xE+50){
+			enemiesArray[a].velx = -1;
+		}
+	}
+	else if(player.x <= plat.xP2 + 84 && player.x + 50 >= plat.xP2 && player.y + 50 >= plat.yP2 && player.y + 50 <= plat.yP2 + 27){
+		if(player.x < enemiesArray[a].xE - 50){
+			enemiesArray[a].velx = 1;
+		}
+		else if(player.x > enemiesArray[a].xE + 50){
+			enemiesArray[a].velx = -1;
+		}
+	}
+	
+	//enemies move according to the velocity
+	enemiesArray[a].xE += enemiesArray[a].velxE;
+	enemiesArray[a].yE += enemiesArray[a].velyE;
+	
+	//enemies direction changes pictures
+	if(enemiesArray[a].dir == 0){
+		document.getElementById(images[a]).src = "MonsterMove.gif"
+	}
+	else if(enemiesArray[a].dir == 1){
+		document.getElementById(images[a]).src = "MonsterMoveRight.gif"
+	}
+	
+	//enemies drawn according to coordinates
+	document.getElementById(images[a]).style.left = enemiesArray[a].xE;
+	document.getElementById(images[a]).style.top = enemiesArray[a].yE;
+
+	
+}
+
+//if the enemies are dead
+else if(enemiesArray[a].aliveE == 0){
+	//randomized coordinates
+	var randomVariable = 0*1;
+	randomVariable = Math.floor(Math.random() * 98);
+	
+	//enemy is alive again and given a different position to spawn in
+	enemiesArray[a].aliveE = 1;
+	enemiesArray[a].hpE = 20;
+	document.getElementById(images[a]).src = "MonsterMove.gif"
+	statsValue[a] = 0;
+	
+	if(randomVariable >= 0 && randomVariable <=10){
+		enemiesArray[a].floor = 0;
+		enemiesArray[a].xE = 50;
+		enemiesArray[a].yE = 360;
+	}
+	else if(randomVariable >= 11 && randomVariable <= 21){
+		enemiesArray[a].floor = 0;
+		enemiesArray[a].xE = 280;
+		enemiesArray[a].yE = 360;
+	}
+	else if(randomVariable >= 22 && randomVariable <= 32){
+		enemiesArray[a].floor = 0;
+		enemiesArray[a].xE = 500;
+		enemiesArray[a].yE = 360;
+	}
+	else if(randomVariable >= 33 && randomVariable <= 43){
+		enemiesArray[a].floor = 1;
+		enemiesArray[a].xE = 50;
+		enemiesArray[a].yE = 230;
+	}
+	else if(randomVariable >= 44 && randomVariable <= 54){
+		enemiesArray[a].floor = 1;
+		enemiesArray[a].xE = 280;
+		enemiesArray[a].yE = 230;
+	}
+	else if(randomVariable >= 55 && randomVariable <= 65){
+		enemiesArray[a].floor = 1;
+		enemiesArray[a].xE = 500;
+		enemiesArray[a].yE = 230;
+	}
+	else if(randomVariable >= 66 && randomVariable <= 76){
+		enemiesArray[a].floor = 2;
+		enemiesArray[a].xE = 50;
+		enemiesArray[a].yE = 80;
+	}
+	else if(randomVariable >= 77 && randomVariable <= 87){
+		enemiesArray[a].floor = 2;
+		enemiesArray[a].xE = 280;
+		enemiesArray[a].yE = 80;
+	}
+	else if(randomVariable >= 88 && randomVariable <= 98){
+		enemiesArray[a].floor = 2;
+		enemiesArray[a].xE = 500;
+		enemiesArray[a].yE = 80;
+	}
+	
+	//draws enemy
+	document.getElementById(images[a]).style.left = enemiesArray[a].xE;
+	document.getElementById(images[a]).style.top = enemiesArray[a].yE;
+}
+
+}
+for(b=6;b<10;b++){
+
+	//variables for enemy coordinates
+	enemiesArray[b].xE = parseInt(document.getElementById(images[b]).style.left);
+	enemiesArray[b].yE = parseInt(document.getElementById(images[b]).style.top);
+	
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	
+	//flying skulls move according to the player's position
+	if(player.x < enemiesArray[b].xE - 50){
+		enemiesArray[b].velx = - 2;
+	}
+	else if(player.x > enemiesArray[b].xE+50){
+		enemiesArray[b].velx = 2;
+	}
+	
+	//COLLISION
+	//if skull collides with player, the player is damaged
+	if(player.x <= enemiesArray[b].xE + 50 && player.x >= enemiesArray[b].xE && enemiesArray[b].yE > player.y - 20 && enemiesArray[b].yE +50 < player.y + 70){
+		if(shield <= 0){
+			heart -= .30;
+		}
+		else if(shield > 0){
+			shield -= .30;
+		}
+	}
+	else if(player.x + 50 >= enemiesArray[b].xE && player.x + 50 <= enemiesArray[b].xE + 50 && enemiesArray[b].yE > player.y - 20 && enemiesArray[b].yE +50 < player.y + 70){
+		if(shield <= 0){
+			heart -= .30;
+		}
+		else if(shield > 0){
+			shield -= .30;
+		}
+	
+	}
+	
+	//enemies move by adding their velocity
+	enemiesArray[b].xE += enemiesArray[b].velx;
+	enemiesArray[b].yE += enemiesArray[b].vely;
+	
+	//enemies are drawn
+	document.getElementById(images[b]).style.left = enemiesArray[b].xE;
+	document.getElementById(images[b]).style.top = enemiesArray[b].yE;
+	
+	//enemies are dead
+	if(enemiesArray[b].aliveE == 0){
+		//enemies are given a new respawn location
+		var randomLocation = 0*1
+		randomLocation = Math.floor(Math.random() * 550);
+		
+		//enemies are alive with health returned to them
+		enemiesArray[b].aliveE = 1;
+		enemiesArray[b].hpE = 20;
+		statsValue[b] = 0
+		
+		document.getElementById(images[b]).src = "monsterskull.gif"
+		
+		//location determined by their starting position
+		document.getElementById(images[b]).style.left = randomLocation;
+		if(b == 6){
+			document.getElementById(images[b]).style.top = 150;
+		}
+		else if(b == 7){
+			document.getElementById(images[b]).style.top = 300;
+		}
+		else if(b == 8 || b == 9){
+			document.getElementById(images[b]).style.top = 70;
+		}
+		
+		
+	}
+	
+}
+
+
+}
+
+
+
+function jump(){
+	
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//jump is enabled
+	if(jumpEnable == 1){
+
+		jumpNumber += 1;
+	
+		//player jumps as long as jump number is not maxed out
+		if(jumpNumber >= 0 && jumpNumber < 18){
+			player.y -= 5
+		}
+		
+		if(jumpNumber >= 20){
+			jumpNumber = 0;
+			
+			gravityEnable = 1
+			
+		}
+		
+	
+	}
+	
+	//player is drawn
+	document.getElementById(images[10]).style.left = player.x;
+	document.getElementById(images[10]).style.top = player.y;
+	
+}
+
+
+//key code for player movement
+function playerMovement(event){
+	if(window.event){
+		event = window.event;
+		keys = event.keyCode;
+		moveSide();
+	}
+	else{
+		keys = event.which;
+		moveSide();
+	}
+}
+
+
+
+function move(){
+	//variables for player x and y coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//player can move horizontally as long as they fit inside the boundaries
+	if(player.x > 0 && player.x < 570){
+		player.x += player.velx
+	}
+	else{
+		if(player.x <= 1){
+			player.x += 2;
+		}
+		else if(player.x >= 570){
+			player.x -= 2;
+		}
+	}
+	
+	//player can move vertically as long as they fit inside the boundaries
+	if(player.y < 365 && player.y > 0){
+		player.y += player.vely
+	}
+	else{
+		if(player.y <= 1){
+			player.y += 5
+		}
+		else if(player.y >= 340){
+			player.y -= 5
+		}
+	}
+	for(a=0;a<2;a++){
+	
+		//variables for platform coordinates
+		plat.xP = parseInt(document.getElementById(platforms[a]).style.left);
+		plat.yP = parseInt(document.getElementById(platforms[a]).style.top);
+	
+		//if player is on the platform, they do not fall through
+		if(player.y + 50 >= plat.yP && player.y < plat.yP){
+			gravityEnable = 0;
+			allowDown = 0;
+			if(player.x > plat.xP + 84){
+				gravityEnable = 1;
+			}
+			else if(player.x + 30 < plat.xP ){
+				gravityEnable = 1;
+			}
+		}
+	
+	}
+	
+	//draw player
+	document.getElementById(images[10]).style.left = player.x
+	document.getElementById(images[10]).style.top = player.y
+
+
+}
+
+
+function gravity(){
+
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//if gravity is enabled, player falls in certain places (boundaries)
+	if(gravityEnable == 1){
+		if(player.y + 50 < 415 && player.y + 50 > 280){
+			player.y += 5
+			jumpEnable = 0;
+		}
+		else if(player.y + 50 < 280 && player.y + 50 > 135){
+			player.y += 5;
+			jumpEnable = 0;
+			allowDown = 1;
+		}
+		else if(player.y + 50 < 135 && player.y + 50 > 1){
+			player.y += 5;
+			jumpEnable = 0;
+			allowDown = 1;
+		}
+	
+		//draws player
+		document.getElementById(images[10]).style.left = player.x
+		document.getElementById(images[10]).style.top = player.y
+		
+	
+	}
+}
+
+
+function moveSide(){
+
+	//variables for player coordinates
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	//key for "S"
+	if(keys == 115){
+		//if player can go through the platform, she will until she get stopped by another obstacle
+		if(allowDown == 1){
+			player.vely = 5;
+			document.getElementById(images[10]).src = "CharacterJumpLeft.gif"
+		}
+		else if(allowDown == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+	}
+	//key for "W"
+	if(keys == 119){
+		//player jumps, gravity is off
+		jumpEnable = 1;
+		gravityEnable = 0;
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterJumpLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterJumpRight.gif"
+		}
+	}
+	//key for "A"
+	if(keys == 97){
+		//player moves left
+		player.velx = -4;
+		direction = 0;
+		document.getElementById("sword").src = "blank.gif"
+		document.getElementById(images[10]).src = "CharacterWalkLeft.gif"
+	}
+	//key for "D"
+	if(keys == 100){
+		//player moves right
+		player.velx = 4;
+		direction = 1;
+		document.getElementById("sword").src = "blank.gif"
+		document.getElementById(images[10]).src = "CharacterWalkRight.gif"
+	}
+	//key for "spacebar"
+	if(keys == 32){
+		for(a=0;a<6;a++){
+			for(b=0;b<6;b++){
+				//right side line is cleared and refreshed
+				iconsChosen[a][b] = 0;
+				selectFinish = 0;
+				number = 5;
+				length = 0;
+				//icons are reset
+				if(iconsNumber[a][b] == 0){
+					document.getElementById(icons[a][b]).src = "coin.gif"
+				}
+				else if(iconsNumber[a][b] == 1){
+					document.getElementById(icons[a][b]).src = "potion.gif"
+				}
+				else if(iconsNumber[a][b] == 2){
+					document.getElementById(icons[a][b]).src = "shield.gif"
+				}
+				else if(iconsNumber[a][b] == 3){
+					document.getElementById(icons[a][b]).src = "sword.gif"
+				}
+				else if(iconsNumber[a][b] == 4){
+					document.getElementById(icons[a][b]).src = "skull.gif"
+				}
+			}
+		}
+	}
+	//key for "F"
+	if(keys == 102){
+	for(a=0;a<10;a++){
+		//variables for player coordinates
+		player.x = parseInt(document.getElementById(images[10]).style.left);
+		player.y = parseInt(document.getElementById(images[10]).style.top);
+		
+		//variables for enemy coordinates
+		enemiesArray[a].xE = parseInt(document.getElementById(images[a]).style.left);
+		enemiesArray[a].yE = parseInt(document.getElementById(images[a]).style.top);
+		
+		//variables for sword coordinates
+		var swordX = parseInt(document.getElementById("sword").style.left);
+		var swordY = parseInt(document.getElementById("sword").style.top);
+		
+		
+		//if player does not have the sword, the player does 5 damage
+		//COLLISION with enemy
+		if(sword == 0){
+		if(enemiesArray[a].xE < player.x + 70 && enemiesArray[a].xE > player.x && enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE +50 < player.y + 70){
+			
+			enemiesArray[a].hpE -= player.dam;
+			
+			if(enemiesArray[a].hpE == 15){
+				statsValue[a] = 1;
+			}
+			else if(enemiesArray[a].hpE == 10){
+				statsValue[a] = 2;
+			}
+			else if(enemiesArray[a].hpE == 5){
+				statsValue[a] = 3;
+			}
+			
+			//if enemy is dead, exp is given and the monster will be respawned
+			if(enemiesArray[a].hpE <= 0){
+				document.getElementById(images[a]).src = "blank.gif"
+				enemiesArray[a].aliveE = 0;
+			
+				exp += 5
+			}
+		}
+		//COLLISION
+		else if(enemiesArray[a].xE + 50 > player.x - 20 && enemiesArray[a].xE + 50 < player.x && enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE +50 < player.y + 70){
+			
+			enemiesArray[a].hpE -= player.dam;
+			
+			//health determines stat image indicator
+			if(enemiesArray[a].hpE == 15){
+				statsValue[a] = 1;
+			}
+			else if(enemiesArray[a].hpE == 10){
+				statsValue[a] = 2;
+			}
+			else if(enemiesArray[a].hpE == 5){
+				statsValue[a] = 3;
+			}
+			
+			//enemy dead, exp given, respawned
+			if(enemiesArray[a].hpE == 0){
+				document.getElementById(images[a]).src = "blank.gif"
+				enemiesArray[a].aliveE = 0;
+				
+				exp += 5
+			}
+			
+		}
+		
+		//direction determines picture
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterAttackLeft.gif"
+		}
+		
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterAttackRight.gif"
+		}
+		
+		}
+		
+		
+		//if sword is obtained, the character does 10 damage and has longer range
+		//COLLISION
+		else if(sword == 1){
+		
+		if(enemiesArray[a].xE < swordX + 60 && enemiesArray[a].xE > swordX - 30 && enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE +50 < player.y + 70){
+			
+			enemiesArray[a].hpE -= player.dam;
+			
+			//health of enemy determines stats
+			if(enemiesArray[a].hpE == 15){
+				statsValue[a] = 1;
+			}
+			else if(enemiesArray[a].hpE == 10){
+				statsValue[a] = 2;
+			}
+			else if(enemiesArray[a].hpE == 5){
+				statsValue[a] = 3;
+			}
+			
+			//if enemy is dead, exp is given and the enemy is spawned
+			if(enemiesArray[a].hpE <= 0){
+				document.getElementById(images[a]).src = "blank.gif"
+				enemiesArray[a].aliveE = 0;
+			
+				exp += 5
+			}
+		}
+		//COLLISION
+		else if(enemiesArray[a].xE + 50 > swordX && enemiesArray[a].xE + 50 < swordX + 90 && enemiesArray[a].yE > player.y - 20 && enemiesArray[a].yE +50 < player.y + 70){
+			
+			enemiesArray[a].hpE -= player.dam;
+			
+			if(enemiesArray[a].hpE == 15){
+				statsValue[a] = 1;
+			}
+			else if(enemiesArray[a].hpE == 10){
+				statsValue[a] = 2;
+			}
+			else if(enemiesArray[a].hpE == 5){
+				statsValue[a] = 3;
+			}
+			
+			if(enemiesArray[a].hpE == 0){
+				document.getElementById(images[a]).src = "blank.gif"
+				enemiesArray[a].aliveE = 0;
+				
+				exp += 5
+			}
+			
+		}
+		
+		
+		
+		if(direction == 0){
+			document.getElementById("sword").src = "charswordright.gif"
+		}
+		
+		else if(direction == 1){
+			document.getElementById("sword").src = "charsword.gif"
+		}	
+		
+		}
+		
+		
+	}
+	
+	
+	}
+	
+}
+
+//for smoother player movement using timers and velocity
+function keyUp(event){
+	if(window.event){
+		event=window.event;
+		keys = event.keyCode;
+	}
+	else{
+		keys = event.which;
+	}
+	
+	if(keys == 83){
+		player.vely = 0;
+		
+	}
+	if(keys == 87){
+		player.vely = 0;
+		
+		//direction determines picture and where the player faces
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+		
+	}
+	if(keys == 65){
+		player.velx = 0;
+		
+		//direction determines picture and where the player faces
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+	}
+	if(keys == 68){
+		player.velx = 0;
+		
+		//direction determines picture and where the player faces
+		if(direction == 0){
+			document.getElementById(images[10]).src = "CharacterStandLeft.gif"
+		}	
+		else if(direction == 1){
+			document.getElementById(images[10]).src = "CharacterStandRight.gif"
+		}
+	}
+
+}
+
+
+</script>
+
+
+</head>
+
+<body onkeypress="playerMovement(event)" onkeyup="keyUp(event)" onload="placeIcons()">
+<center>
+<table width="1000" height="430">
+
+<tr>
+
+<td>
+
+<table width="600" height="430" background="map.png" class="left">
+<tr>
+<td>
+
+<input type="button" id="nxt" style="position:absolute; top:160; left:5" onclick="parent.location='game2.htm'" value="Next Level" disabled="true">
+
+<img src="platform.gif" id="plat1" style="position:absolute; top:350;left:255"/>
+<img src="platform.gif" id="plat2" style="position:absolute; top:205;left:253"/>
+<img src="mountproneright.png" id="mount" style="position:absolute; top:210; left:0">
+<img src="sworditem.png" id="swordupgrade" height="50" style="position:absolute; top:80; left:270">
+
+<img src="blank.gif" id="sword" style="position:absolute; top:80; left:270;">
+<img src="CharacterStand.gif" id="pl1" width="30" height="50" style="position:absolute; top:300; left:100 " />
+<img src="MonsterMove.gif" id="ai1" width="50" style="position:absolute; top:230; left:330" />
+<img src="MonsterMove.gif" id="ai2" width="50" style="position:absolute; top:230; left:100" />
+<img src="MonsterMove.gif" id="ai3" width="50" style="position:absolute; top:230; left:430" />
+<img src="MonsterMove.gif" id="ai4" width="50" style="position:absolute; top:230; left:200" />
+<img src="MonsterMove.gif" id="ai5" width="50" style="position:absolute; top:230; left:280" />
+<img src="MonsterMove.gif" id="ai6" width="50" style="position:absolute; top:230; left:50" />
+<img src="monsterskull.gif" id="ai7" width="50" style="position:absolute; top:150; left:50" />
+<img src="monsterskull.gif" id="ai8" width="50" style="position:absolute; top:300; left:250" />
+<img src="monsterskull.gif" id="ai9" width="50" style="position:absolute; top:70; left:300" />
+<img src="monsterskull.gif" id="ai10" width="50" style="position:absolute; top:70; left:200" />
+<img id="ai1s" width="50" height="30" style="position:absolute;"/>
+<img id="ai2s" width="50" height="30" style="position:absolute;"/>
+<img id="ai3s" width="50" height="30" style="position:absolute;"/>
+<img id="ai4s" width="50" height="30" style="position:absolute;"/>
+<img id="ai5s" width="50" height="30" style="position:absolute;"/>
+<img id="ai6s" width="50" height="30" style="position:absolute;"/>
+<img id="ai7s" width="50" height="30" style="position:absolute;"/>
+<img id="ai8s" width="50" height="30" style="position:absolute;"/>
+<img id="ai9s" width="50" height="30" style="position:absolute;"/>
+<img id="ai10s" width="50" height="30" style="position:absolute;"/>
+<img id="pl1s" width="50" height="30" style="position:absolute;"/>
+
+</td>
+</tr>
+</table>
+
+</td>
+
+<td width="400" background="frame.png">
+<table align="center" class="right">
+<tr>
+<td width="40" height="45">
+<img src="defupgrade.png" width="100" height="50" style="position:absolute; top:325; left:50;" onclick="shieldup()">
+<img src="hpregen.png" width="100" height="48" style="position:absolute; top:325; left:170" onclick="regenup()">
+<img src="priceshield.png" width="50" style="position:absolute; top:325; left:0">
+<img src="pricepotion.png" width="50" style="position:absolute; top:325; left:270">
+<img id="1td1" onclick="select(iconsNumber[0][0])" 
+ onmouseover="over(iconsNumber[0][0], 0, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="1td2" onclick="select(iconsNumber[0][1])"
+ onmouseover="over(iconsNumber[0][1], 0, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="1td3" onclick="select(iconsNumber[0][2])"
+ onmouseover="over(iconsNumber[0][2], 0, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="1td4" onclick="select(iconsNumber[0][3])"
+ onmouseover="over(iconsNumber[0][3], 0, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="1td5" onclick="select(iconsNumber[0][4])"
+ onmouseover="over(iconsNumber[0][4], 0, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="1td6" onclick="select(iconsNumber[0][5])"
+ onmouseover="over(iconsNumber[0][5], 0, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="2td1" onclick="select(iconsNumber[1][0])"
+ onmouseover="over(iconsNumber[1][0], 1, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="2td2" onclick="select(iconsNumber[1][1])"
+ onmouseover="over(iconsNumber[1][1], 1, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="2td3" onclick="select(iconsNumber[1][2])"
+ onmouseover="over(iconsNumber[1][2], 1, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="2td4" onclick="select(iconsNumber[1][3])"
+onmouseover="over(iconsNumber[1][3], 1, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="2td5" onclick="select(iconsNumber[1][4])"
+ onmouseover="over(iconsNumber[1][4], 1, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="2td6" onclick="select(iconsNumber[1][5])"
+ onmouseover="over(iconsNumber[1][5], 1, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="3td1" onclick="select(iconsNumber[2][0])"
+ onmouseover="over(iconsNumber[2][0], 2, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="3td2" onclick="select(iconsNumber[2][1])"
+ onmouseover="over(iconsNumber[2][1], 2, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="3td3" onclick="select(iconsNumber[2][2])"
+ onmouseover="over(iconsNumber[2][2], 2, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="3td4" onclick="select(iconsNumber[2][3])"
+ onmouseover="over(iconsNumber[2][3], 2, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="3td5" onclick="select(iconsNumber[2][4])"
+ onmouseover="over(iconsNumber[2][4], 2, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="3td6" onclick="select(iconsNumber[2][5])"
+ onmouseover="over(iconsNumber[2][5], 2, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="4td1" onclick="select(iconsNumber[3][0])"
+ onmouseover="over(iconsNumber[3][0], 3, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="4td2" onclick="select(iconsNumber[3][1])"
+ onmouseover="over(iconsNumber[3][1], 3, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="4td3" onclick="select(iconsNumber[3][2])"
+ onmouseover="over(iconsNumber[3][2], 3, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="4td4" onclick="select(iconsNumber[3][3])"
+ onmouseover="over(iconsNumber[3][3], 3, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="4td5" onclick="select(iconsNumber[3][4])"
+ onmouseover="over(iconsNumber[3][4], 3, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="4td6" onclick="select(iconsNumber[3][5])"
+ onmouseover="over(iconsNumber[3][5], 3, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="5td1" onclick="select(iconsNumber[4][0])"
+ onmouseover="over(iconsNumber[4][0], 4, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="5td2" onclick="select(iconsNumber[4][1])"
+ onmouseover="over(iconsNumber[4][1], 4, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="5td3" onclick="select(iconsNumber[4][2])"
+ onmouseover="over(iconsNumber[4][2], 4, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="5td4" onclick="select(iconsNumber[4][3])"
+ onmouseover="over(iconsNumber[4][3], 4, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="5td5" onclick="select(iconsNumber[4][4])"
+ onmouseover="over(iconsNumber[4][4], 4, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="5td6" onclick="select(iconsNumber[4][5])"
+ onmouseover="over(iconsNumber[4][5], 4, 5)"/>
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img id="6td1" onclick="select(iconsNumber[5][0])"
+ onmouseover="over(iconsNumber[5][0], 5, 0)"/>
+</td>
+<td width="40" height="45">
+<img id="6td2"  onclick="select(iconsNumber[5][1])"
+ onmouseover="over(iconsNumber[5][1], 5, 1)"/>
+</td>
+<td width="40" height="45">
+<img id="6td3"  onclick="select(iconsNumber[5][2])"
+ onmouseover="over(iconsNumber[5][2], 5, 2)"/>
+</td>
+<td width="40" height="45">
+<img id="6td4"  onclick="select(iconsNumber[5][3])"
+ onmouseover="over(iconsNumber[5][3], 5, 3)"/>
+</td>
+<td width="40" height="45">
+<img id="6td5"  onclick="select(iconsNumber[5][4])"
+ onmouseover="over(iconsNumber[5][4], 5, 4)"/>
+</td>
+<td width="40" height="45">
+<img id="6td6"  onclick="select(iconsNumber[5][5])"
+ onmouseover="over(iconsNumber[5][5], 5, 5)"/>
+</td>
+
+</tr>
+</table>
+</td>
+</tr>
+</table>
+
+<table width="1000" height="150" background="bottom2.gif">
+<tr>
+<td>
+
+
+<table width="300" height="150" style="position:relative;">
+<tr>
+<td>
+
+<img src="profile.png" height="170" width="220" style="position:absolute; top:0; left:75;"/>
+
+</td>
+</tr>
+</table>
+
+
+</td>
+
+
+<td>
+
+<div class="corners">
+<table width="500" style="position:relative;">
+<tr height="50">
+<td align="center">
+<div style="position:absolute; top:1; left:100;font-size:40px; color:black; font-weight:bold;" id="outputhearts"></div>
+<img src="heartbar0.gif" width="240" id="hearts">
+</td>
+<td align="center">
+<div style="position:absolute; top:1; left:380; font-size:40px; color:green; font-weight:bold;" id="outputxps"></div>
+<img src="xpbar0.gif" width="240" id="exps">
+</td>
+</tr>
+<tr height="50">
+<td align="center">
+<div style="position:absolute; top:55; left:100; font-size:40px; color:blue; font-weight:bold;" id="outputshields"></div>
+<img src="shieldbar0.gif" width="240" id="shields">
+</td>
+<td align="center">
+<div style="position:absolute; top:55; left:380; font-size:40px; color:FDD017; font-weight:bold;" id="outputcoins"></div>
+<img src="coinbar0.gif" width="240" id="coins">
+</td>
+
+</tr>
+</table>
+</div>
+
+</td>
+<td>
+
+<div class="corners2">
+<table>
+<tr>
+<td>
+LEVEL:
+<div id="outputlevel"></div>
+</td>
+</tr>
+</table>
+</div>
+
+
+
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td id="value">
+a
+</td>
+<td id="next">
+a
+</td>
+<td>
+<input type="button" onclick="player.level += 1; exp = 0;
+		maxheart += 20;
+		heart += maxheart/6;">
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

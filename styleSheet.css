@@ -1,0 +1,488 @@
+@font-face{
+	font-family: "homeFont";
+	src: url("homestead.woff") format('woff');
+}
+@font-face{
+	font-family: "homeFontB";
+	src: url("homestead.woff") format('woff');
+	font-weight:bold;
+}
+
+.circle{
+	margin-top:10px;
+}
+.name{
+	color:#66CCFF;
+}
+.relative{
+	position:relative;
+}
+
+
+
+
+.topbar{
+	width:100%;
+	height:50px;
+	line-height:50px;
+	background-image: url(blackbackground.gif);
+	color: #FFF;
+	
+	
+	
+}
+.topbar ul{
+	margin-left:150px;
+	width:850px;
+	
+}
+.topmenu li{
+	float:left;
+	list-style:none;
+	font-family:homeFont;
+	
+}
+.topmenu ul{
+	width:800px;
+	
+}
+.topbar ul li{
+	margin-right:20px;
+	
+}
+
+.topmenu a{
+	color:#666666;
+	text-decoration:none;
+	
+	transition-property: color;
+	transition-duration: .7s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: color;
+	-webkit-transition-duration: .7s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: color;
+	-moz-transition-duration: .7s;
+	-moz-transition-timing-function: ease;
+
+}
+.topmenu a:visited{
+	text-decoration:none;
+}
+
+.topmenu a:hover{
+	color:#FFFFFF;
+}
+
+
+body{
+	margin: 0;
+}
+h1{
+	margin-top:0px;
+}
+
+.secondBlock{
+	width:1000px;
+	height:150px;
+	background-color:#3399CC;
+	-webkit-box-shadow:1px 1px 3px 3px #FFFFFF;
+	box-shadow: 1px 1px 15px 3px black;
+	-moz-box-shadow:1px 1px 3px 3px #FFFFFF;
+	padding-bottom:0px;
+}
+.welcome{
+	font-family:homeFontB;
+	width:500px;
+	height:130px;
+	color:white;
+	font-size:15px;
+	
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	-webkit-box-shadow:0px 1px 20px 2px #FFFFFF;
+	box-shadow: 0px 1px 20px 2px #FFFFFF;
+	-moz-box-shadow:0px 1px 20px 2px #FFFFFF;
+	
+	margin-bottom: 10px;
+	border-bottom: 0;
+	background:#3399CC;
+	position:absolute;
+	left:400px;
+	top:10px;
+	
+}
+.welcomeHeader{
+	font-family:homeFontB;
+	text-shadow:2px 2px #006699;
+	border-bottom:0;
+	
+	z-index:1;
+	position:relative;
+}
+.headerbackground{
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	position:absolute;
+	z-index:-1;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	background:#006699;
+	opacity:0.6;
+	width:100%;
+	height:100%;
+	
+}
+
+
+.menuHeader{
+	font-family:homeFontB;
+	text-shadow:2px 2px #CCCCCC;
+	border-bottom:0;
+	text-align:center;
+	z-index:1;
+	position:relative;	
+}
+.menubackground{
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	
+	position:absolute;
+	z-index:-1;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	background:#006699;
+	opacity:0.6;
+	width:100%;
+	height:100%;
+
+}
+
+.logo{
+	position: absolute;
+	width:500px;
+	left:0px;
+	top:0px;
+}
+
+.leftMenu{
+	position:relative;
+	font-family:homeFont;
+	width:260px;
+	height:470px;
+	background-color:#94CDFF;
+	margin-top:5px;
+	border-radius: 7px;
+	-moz-border-radius: 7px;
+	
+	z-index:140;
+
+}
+.leftMenu .menuList{
+	position:relative;
+	width:200px;
+	height:400px;
+	list-style:none;
+	font-size:22px;
+
+}
+
+.menuList li{
+	color:black;
+	text-decoration:none;
+	
+	transition-property: color;
+	transition-duration: .7s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: color;
+	-webkit-transition-duration: .7s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: color;
+	-moz-transition-duration: .7s;
+	-moz-transition-timing-function: ease;
+
+}
+
+.menuList li:hover{
+	color:white;
+}
+
+
+
+.menuLinkClass{
+	font-family:homeFont;
+	position:relative;
+	
+	border-radius: 7px;
+	-moz-border-radius: 7px;
+	z-index:100;
+}
+
+
+
+
+.contentOut{
+	font-family:homeFont;
+	width:720px;
+	height:450px;
+	color:black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background:#3399CC;
+	padding:10px;
+	margin-top:5px;
+	
+	
+}
+.contentInStatic{
+	font-family:arial;
+	font-size:20px;
+	width:600px;
+	color:black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background:#DBECFF;
+	padding:2px;
+	margin-top:8px;
+	padding-left:30px;
+	padding-right:30px;
+}
+.contentIn{
+	
+	font-family:arial;
+	font-size:16px;
+	width:600px;
+	color:black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background:#DBECFF;
+	padding:2px;
+	margin-top:8px;
+	padding-left:30px;
+	padding-right:30px;
+	
+	
+	
+	height:40px;
+	
+	transition-property: height;
+	transition-duration: .7s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: height;
+	-webkit-transition-duration: .7s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: height;
+	-moz-transition-duration: .7s;
+	-moz-transition-timing-function: ease;
+}
+
+.csafetyBodyRight{
+	font-family:homeFont;
+	width:500px;
+	height:100px;
+	color:black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background:#3399CC;
+	padding:10px;
+	margin-top:0px;
+
+}
+.csafetyBodyLeft{
+	font-family:homeFont;
+	width:460px;
+	height:100px;
+	color:black;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	background:#3399CC;
+	padding:10px;
+	margin-top:0px;
+	font-size:17px;
+}
+.botText{
+	font-size:25px;
+	color:blue;
+	margin-bottom:0px;
+}
+
+.contentIn:hover{
+	height:260px;
+}
+
+
+.contentIn:hover .weltext,
+.contentIn:hover ~ .weltext{
+	opacity:1;
+	font-size:17px;
+}
+.contentIn:hover .hoverText,
+.contentIn:hover ~ .hoverText{
+	opacity:0;
+}
+
+.contentIn:hover .ochiruImg,
+.contentIn:hover ~ .ochiruImg{
+	height:0px;
+	
+	font-size:0px;
+}
+.contentIn:hover .mapleImg,
+.contentIn:hover ~ .mapleImg{
+	height:0px;
+	font-size:0px;
+}
+.contentIn:hover .fpText,
+.contentIn:hover ~ .fpText{
+	font-size: 0px;
+}
+.mapleImg:hover .ochiruImg,
+.mapleImg:hover ~ .ochiruImg{
+	height:20px;
+	
+}
+
+.ochiruImg:hover .mapleImg,
+.ochiruImg:hover ~ .mapleImg{
+	height:20px;
+	
+}
+
+.ochiruImg:hover .csafety,
+.ochiruImg:hover ~ .csafety{
+	height:10px;
+
+}
+
+
+.ochiruImg:hover{
+	height:180px;
+}
+
+.mapleImg:hover{
+	height:180px;
+
+}
+
+
+.ochiruImg{
+	height:25px;
+	width:650px;
+	margin-top:0px;
+
+	z-index:2;
+
+	background-image: url(ochiruBackground.png);
+	border-top:20px solid;
+	border-left:20px solid;
+	border-right:20px solid;
+	border-bottom:0px;
+	background-clip:content-box;
+	border-image:url(pokemonBorder.png) 30 30 round;
+	-moz-border-image:url(pokemonBorder.png) 30 30 round;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	
+	transition-property: height;
+	transition-duration: .6s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: height;
+	-webkit-transition-duration: .6s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: height;
+	-moz-transition-duration: .6s;
+	-moz-transition-timing-function: ease;
+
+	
+
+}
+
+.mapleImg{
+	height:25px;
+	width:650px;
+	margin-top:0px;
+	background-image: url(mapleBackground.png);
+	border-top:0px;
+	border-left:20px solid;
+	border-right:20px solid;
+	border-bottom:20px;
+	background-clip:content-box;
+	border-image:url(mapleBorder.png) 30 30 round;
+	-moz-border-image:url(mapleBorder.png) 30 30 round;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	
+	transition-property: height;
+	transition-duration: .6s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: height;
+	-webkit-transition-duration: .6s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: height;
+	-moz-transition-duration: .6s;
+	-moz-transition-timing-function: ease;
+}
+
+.weltext{
+	opacity:0;
+	height:0;
+	font-size:0px;
+	transition-property: opacity;
+	transition-duration: 1s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: opacity;
+	-moz-transition-duration: 1s;
+	-moz-transition-timing-function: ease;
+}
+
+.hoverText{
+	font-size:10px;
+	font-family:arial;
+	text-decoration:underline;
+	padding:0px;
+	margin-bottom:0px;
+	
+	transition-property: opacity;
+	transition-duration: .6s;
+	transition-timing-function: ease;
+	
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: .6s;
+	-webkit-transition-timing-function: ease;
+	
+	-moz-transition-property: opacity;
+	-moz-transition-duration: .6s;
+	-moz-transition-timing-function: ease;
+}
+
+.descriptionBox{
+	height:10px;
+	width:250px;
+	float:right;
+	margin-right:60px;
+	background:#DBECFF;
+}
+
+
+

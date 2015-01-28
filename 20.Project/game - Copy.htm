@@ -1,0 +1,314 @@
+<html>
+<head>
+<title>
+Dungeon Raid
+</title>
+<style type="text/css">
+div.corners{
+	background-color: white;
+	padding:5px;
+	border-radius:15px;
+	-moz-border-radius:20px;
+	width:500
+	
+	}
+	
+table.left{
+	position:relative;
+}
+
+
+</style>
+
+<script language="javascript">
+
+var images = new Array("ai1","ai2","ai3","ai4","ai5","ai6","ai7","ai8","ai9","ai10","pl1");
+
+var keys;
+
+function enemies(xE,yE,velxE,velyE,aliveE,hpE){
+	this.xE = xE;
+	this.yE = yE;
+	this.velxE = velxE;
+	this.velyE = velyE;
+	this.aliveE = aliveE;
+	this.hpE = hpE;
+}
+
+function player(x,y,velx,vely,alive,hp){
+	this.x = x;
+	this.y = y;
+	this.velx = velx;
+	this.vely = vely;
+	this.alive = alive;
+	this.hp = hp;
+
+}
+
+var enemiesArray = new Array();
+
+
+var x = 1*1;
+var y = 1*1;
+
+//var xE = 1*1;
+//var yE = 1*1;
+
+//for(var a=0;a<10;a++){
+//	enemiesArray[a] = new enemies(xE,yE,0,0,1,10);
+//}
+
+
+function playerMovement(event){
+
+	
+	if(window.event){
+		event=window.event;
+		keys=event.keyCode;
+	}
+	else{
+		keys=event.which;
+	}
+	
+	
+	if(keys == 97){
+		player.velx = -10;
+		player.vely = 0;
+		
+	}
+	else if(keys == 115){
+		player.vely = 10;
+		player.velx = 0;
+		document.getElementById(images[10]).src = "CharacterJump.gif"
+	}
+	else if(keys == 100){
+		player.velx = 10;
+		player.vely = 0;
+		document.getElementById(images[10]).src = "CharacterWalk.gif"
+	}
+	else if(keys == 119){
+		player.vely = -10;
+		player.velx = 0;
+		document.getElementById(images[10]).src = "CharacterJump.gif"
+	}
+	
+	
+}
+
+function timerPlayer(){
+	
+	
+	timer = setInterval("timerPlayer()", 10);
+	
+	player.x = parseInt(document.getElementById(images[10]).style.left);
+	player.y = parseInt(document.getElementById(images[10]).style.top);
+	
+	player.x += player.velx
+	player.y += player.vely
+
+	document.getElementById(images[10]).style.left = player.x
+	document.getElementById(images[10]).style.top = player.y
+	
+	document.getElementById(images[10]).src = "CharacterWalk.gif"
+	
+}
+
+
+</script>
+
+
+</head>
+
+<body onload="timerPlayer()" onkeypress="playerMovement(event)">
+<center>
+<table width="1000" height="430">
+
+<tr>
+
+<td>
+
+<table width="600" height="430" background="map.png" class="left">
+<tr>
+<td>
+<img src="CharacterStand.gif" id="pl1" width="35" style="position:absolute; top:200; left:100 " />
+</td>
+</tr>
+</table>
+
+</td>
+
+<td width="400" background="frame.png">
+<table align="center">
+<tr>
+<td width="40" height="45">
+<img src="coin.gif">
+</td>
+<td width="40" height="45">
+<img src="potion.gif">
+</td>
+<td width="40" height="45">
+<img src="sword.gif">
+</td>
+<td width="40" height="45">
+<img src="potion.gif">
+</td>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img src="coin.gif">
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+</tr>
+<tr>
+<td width="40" height="45">
+<img src="shield.gif">
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+
+</td>
+<td width="40" height="45">
+<img src="sword.gif">
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table width="1000" height="150" background="bottom2.gif">
+<tr>
+<td>
+
+<table width="300" height="150">
+<tr>
+<td>
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+<img src="profile.png" height="140" width="180">
+
+</td>
+</tr>
+</table>
+</td>
+
+
+<td>
+<center>
+<div class="corners">
+<table width="500">
+<tr height="50">
+<td align="right">
+<img src="heartbar.png" width="240">
+</td>
+<td align="right">
+<img src="potionbar.png" width="240">
+</td>
+</tr>
+<tr height="50">
+<td align="right">
+<img src="shieldbar.png" width="240">
+</td>
+<td align="right">
+<img src="coinbar.png" width="240">
+</td>
+
+</tr>
+</table>
+</div>
+</center>
+
+
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

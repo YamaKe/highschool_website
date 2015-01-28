@@ -1,0 +1,221 @@
+<html>
+<head>
+<title>
+Homepage
+</title>
+
+<link rel="stylesheet" type="text/css" href="styleSheet.css">
+
+<script language="javascript">
+	function change(name){
+		//var par = document.getElementById("para");
+		//var emb = document.getElementById("embe");
+		//par.setAttribute("src", name);
+		//emb.setAttribute("value", name);
+		
+		
+		if(name == 0){
+			document.getElementById('flash').innerHTML = "<embed src='greetingcard.swf' name='greet'  width='560' height='400' ></embed>";
+			
+		}
+		else if(name == 1){
+			document.getElementById('flash').innerHTML = "<embed src='landscape.swf' name='land'  width='560' height='400' ></embed>";
+			
+		}
+		else if(name == 2){
+			document.getElementById('flash').innerHTML = "<embed src='tribute.swf' name='trib' width='560' height='400'></embed>";
+			
+		}
+		else if(name == 3){
+			document.getElementById('flash').innerHTML = "<embed src='tutorial.swf' name='trib' width='560' height='400'></embed>";
+			
+		}
+		else if(name == 4){
+			document.getElementById('flash').innerHTML = "<embed src='sound.swf' name='trib' width='560' height='400'></embed>";
+			
+		}
+		else if(name == 5){
+			document.getElementById('flash').innerHTML = "<embed src='carrental.swf' name='cr' width='560' height='400'></embed>"
+		}
+		else if(name == 6){
+			document.getElementById('flash').innerHTML = "<embed src='acetokingCS3.swf' name='ag' width='560' height='400'></embed>"
+		}
+		else if(name == 7){
+			document.getElementById('flash').innerHTML = "<embed src='shooting.swf' name='st' width='560' height='400'></embed>"
+		}
+		else if(name == 8){
+			document.getElementById('flash').innerHTML = "<embed src='coralreef.swf' name='st' width='600' height='400'></embed>"
+		}
+		
+	}
+</script>
+
+
+<style type="text/css">
+	
+	/* pushes the page to the full capacity of the viewing area */
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	/* prepares the background image to full capacity of the viewing area */
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	/* places the content ontop of the background image */
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+
+</style>
+
+
+
+
+</head>
+
+<body>
+
+<div id="bg"><img src="skybluebackground.jpg" width="100%" height="100%" alt=""></div>
+
+
+<center>
+<div class="topbar">
+
+	<ul class="topmenu" width="80">
+		<li>GITA Webpage</li>
+		<li>-</li>
+		<li class="name">Kevin Lee</li>
+		<li class="circle"><img src="circleH.gif"></li>
+		<li><a href="index.htm">Home</a></li>
+		<li class="circle"><img src="circleF.gif"></li>
+		<li><a href="freshman.html">Freshman</a></li>
+		<li class="circle"><img src="circleS.gif"></li>
+		<li><a href="sophmorehome.htm">Sophmore</a></li>
+		<li class="circle"><img src="circleJ.gif"></li>
+		<li><a>Junior</a></li>
+	</ul>
+
+</div>
+<div class="secondBlock relative">
+
+	<div class="logo">
+		<img src="logo.gif" height="150px">
+	</div>
+	<div class="welcome">
+		<h1 class="welcomeHeader"><div class="headerbackground"></div>YamaKe Productions</h1>
+		<p>Technology is the future. I plan to be a part of it.
+		<br>
+		
+		Creating computer-based projects for the sake of creating.
+		</p>
+	</div>
+	
+</div>
+<table>
+<tr>
+<td width="250px">
+<div class="leftMenu">
+	<h1 class="menuHeader"><div class="menubackground"></div>Junior Projects</h1>
+		
+		<ul class="menuList">
+		
+		<li><a onclick="change(0)" id="gc"><div class="menuLinkClass">Greeting Card</div></a></li>
+	
+		<li><a class="menuLinkClass" onclick="change(1)" id="ls">Landscape</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(2)" id="trib">Tribute</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(3)" id="tut">Tutorial</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(4)" id="sp">Sound Program</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(5)" id="cr">Car Rental</a></li>
+	
+		<li><a class="menuLinkClass" onclick="change(6)" id="ag">Ace to King</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(7)" id="st">Shooting Game</a></li>
+		
+		<li><a class="menuLinkClass" onclick="change(8)" id="cr">Coral Reef</a></li>
+		</ul>
+		
+</div>
+
+</td>
+<td width="720px">
+<div class="contentOut">
+Project
+<br>
+<center>
+	<div class="contentInStatic">
+	<center>
+		<object width="560" height="400"
+		classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+		codebase="http://fpdownload.macromedia.com/
+		pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0">
+		<param name="SRC" value="" id="para">
+		<span id="flash">
+		<embed src="" width="560" height="400" id="embe">
+		</embed>
+		</span>
+		</object>
+		</center>
+	</div>
+<center>	
+</div>
+</td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td>
+<div class="csafetyBodyLeft">
+
+<span class="botText">Ezreal's Escape</span>
+<br>
+Junior Year Final Project
+<br>
+Fight to escape in this side-scrolling flash game!
+<br>
+</div>
+</td>
+<td>
+<div class="csafetyBodyRight">
+<a href="juniorfinal.html"><img src="ezreal.png" height="100px" width="500" align="right"></img></a>
+</div>
+</td>
+
+
+</tr>
+
+
+<tr>
+<td>
+<div class="csafetyBodyLeft">
+
+<span class="botText">Cybersafety Flash Website</span>
+<br>
+Junior Year Midterm Project
+<br>
+Educate yourself on the dangers of the internet! Ninja style!
+<br>
+<span style="color:red">Please wait for the videos to load!</span>
+</div>
+</td>
+<td>
+<div class="csafetyBodyRight">
+<a href="cybersafety.html"><img src="cybersafety.png" height="100px" width="500" align="right"></img></a>
+</div>
+</td>
+
+
+</tr>
+</table>
+
+
+
+
+
+</center>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>
+BallOne
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<style type="text/css">
+
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+	
+	
+</style>
+
+<script language="javascript">
+var moveX = 10;
+var moveY = 10;
+
+var onOff = 0;
+
+function Move(){
+var x = parseInt(document.getElementById("ball").style.left);
+var y = parseInt(document.getElementById("ball").style.top);
+
+if(x>1000){
+moveX = -10
+}
+
+else if(x<=300){
+moveX = 10
+}
+
+if(y<=300){
+moveY = 10
+}
+
+else if(y>550){
+moveY = -10
+}
+
+x += moveX;
+y += moveY;
+
+document.getElementById("ball").style.left = x
+document.getElementById("ball").style.top = y
+
+
+}
+
+function Timer(){
+if(onOff == 0){
+	onOff = 1;
+	timer = setInterval("Move()", 10);
+}
+else if(onOff == 1){
+	onOff = 0
+	clearInterval(timer);
+}
+
+
+}
+
+</script>
+
+</head>
+
+
+
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+
+<center>
+
+
+<table width="800px">
+<tr>
+<td>
+<center>
+
+<h1><img src="heading.jpg"></h1>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self">Sophmore</a></li>
+   <li><a href="sophmore2.htm" target="_self"><span class="tag">Sophmore 2nd</span></a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign16.htm" target="_self"><span class="tag">BallOne</span></a></li>
+	<li><a href="assign17.htm" target="_self">BallFive</a></li>
+	<li><a href="assign18.htm" target="_self">Fish</a></li>
+	<li><a href="assign19.htm" target="_self">Tank</a></li>
+	<li><a href="assign20.htm" target="_self">Digital Profile</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+<br>
+
+<input type="button" name="Auto" value="Animate" onclick="Timer()"/>
+<img width="50" height="20" style="position:absolute; top:400; left:400" id="ball" src="Ball.gif">
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<table align="left">
+<tr>
+<td>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+School Address: 789 Wildcat Way Brea, California 92821 
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+</td>
+</tr>
+</table>
+
+</center>
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

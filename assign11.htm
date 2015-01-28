@@ -1,0 +1,216 @@
+<html>
+<head>
+<title>
+Fish
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+.tdSize{width:70px; height:70px; background-color:green; font-size:40px; text-align:center; color:white; font-weight:bold;}
+.sumFont{font-size:20px; font-weight:bold; color:white;}
+
+	
+	html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	/* places the content ontop of the background image */
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+	
+</style>
+
+<script language="javascript">
+var fishTank = new Array("ai", "ai2", "ai3", "ai4", "ai5", "ai6", "ai7", "ai8");
+var placement = 1*1;
+var totalMove = 0*0;
+var bumpLeft = 0*0;
+var bumpRight = 0*0;
+
+var theSwitch = 0*1;
+
+function callTimer(){
+	if(theSwitch == 0){
+	//timer on
+	theSwitch = 1;
+	timer = setInterval("fish()",100);
+	
+	}
+	else if(theSwitch == 1){
+	//tiemr off
+	theSwitch = 0;
+	clearInterval(timer);
+	
+	}
+}
+
+function fish(){
+var direction = Math.floor(Math.random() * 2);
+
+	if(totalMove == 0){
+		document.getElementById(fishTank[placement]).src="blank.jpg";
+		placement = Math.floor(Math.random() * fishTank.length);
+		document.getElementById(fishTank[placement]).src="fishLeft.jpg";
+		totalMove += 1;
+	}
+	else if(totalMove > 0){
+		if(direction == 0){
+		document.getElementById(fishTank[placement]).src="blank.jpg";
+			if(placement > 0){
+			placement -= 1;
+			}
+			else if(placement == 0){
+			bumpLeft += 1
+			}
+		document.getElementById(fishTank[placement]).src="fishLeft.jpg";
+		totalMove += 1;
+		}
+		else if(direction == 1){
+		document.getElementById(fishTank[placement]).src="blank.jpg";
+			if(placement < 7){
+			placement += 1;
+			}
+			else if(placement == 7){
+			bumpRight += 1
+			}
+		document.getElementById(fishTank[placement]).src="fishRight.jpg";
+		totalMove += 1;
+		}
+	
+	}
+	
+	document.getElementById("movement").innerHTML = totalMove;
+	document.getElementById("left").innerHTML = bumpLeft;
+	document.getElementById("right").innerHTML = bumpRight;
+	
+}
+</script>
+</head>
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+
+<center>
+<table width="800px">
+<tr>
+<td>
+<center>
+<h1><img src="heading.jpg"></h1>
+
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self"><span class="tag">Sophmore</span></a></li>
+   <li><a href="sophmore2.htm" target="_self">Sophmore 2nd</a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign1.htm" target="_self">Facebook</a></li>
+	<li><a href="assign2.htm" target="_self">September Calendar</a></li>
+	<li><a href="assign3.htm" target="_self">Tech Page</a></li>
+	<li><a href="assign5.htm" target="_self">Poster</a></li>
+	<li><a href="assign6.htm" target="_self">Madlibs</a></li>
+	<li><a href="assign8.htm" target="_self">Book Sales</a></li>
+	<li><a href="assign9.htm" target="_self">Rolling Die</a></li>
+	<li><a href="assign10.htm" target="_self">Craps!</a></li>
+	<li><a href="assign11.htm" target="_self"><span class="tag">Fish</span></a></li>
+	<li><a href="assign12.htm" target="_self">Fish2D</a></li>
+	<li><a href="assign13.htm" target="_self">Shark2D</a></li>
+	<li><a href="assign14.htm" target="_self">Tic-Tac-Toe</a></li>
+	<li><a href="assign15.htm" target="_self">HighLow</a></li>
+	</ul>
+</td>
+</tr>
+</table>
+</br>
+
+
+<table border="1" background="underwater.jpg">
+<tr>
+<td>
+<img id="ai" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai2" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai3" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai4" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai5" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai6" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai7" height="90" src="blank.jpg">
+</td>
+<td>
+<img id="ai8" height="90" src="blank.jpg">
+</td>
+</tr>
+</table>
+</br>
+<input type="button" value="     Click     " onclick="fish()">
+<input type="button" value="     Auto     " onclick="callTimer()">
+<table class="sumFont">
+<tr>
+<td>
+Total Movement: 
+</td>
+<td id="movement">
+
+</td>
+</tr>
+<tr>
+<td>
+Bump Left: 
+</td>
+<td id="left">
+
+</td>
+</tr>
+<tr>
+<td>
+Bump Right: 
+</td>
+<td id="right">
+
+</td>
+</tr>
+</table>
+
+</center>
+
+<br>
+<br>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+School Address: 789 Wildcat Way Brea, California 92821 
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+
+</td>
+</tr>
+</table>
+
+</center>
+</body>
+</html>

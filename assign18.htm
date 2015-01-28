@@ -1,0 +1,294 @@
+
+<html>
+<head>
+<title>
+Fish
+</title>
+<link rel="stylesheet" type="text/css" href="styleSheetsoph.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<style type="text/css">
+td{color:white; font-family:arial;}
+.fontSize{font-size:22px;}
+
+html {height:100%;}
+	body {height:100%; margin:0; padding:0;}
+	#bg {position:fixed; top:0; left:0; width:100%; height:100%;}
+	#content {position:relative; z-index:1;}
+	html {overflow-y:hidden;}
+	body {overflow-y:auto;}
+	#bg {position:absolute; z-index:-1;}
+	#content {position:static;}
+
+	
+</style>
+<script language="javascript">
+var onOff = 0*1;
+
+var array = new Array("fishOne", "fishTwo", "fishThree", "fishFour", "fishFive", "shark")
+var bubbleArray = new Array("one", "two", "three", "four", "five", "six")
+
+var alive = new Array(1, 1, 1, 1, 1, 2)
+
+var dirX = new Array(10, 0, -10, 0, -10, 0)
+var dirY = new Array(0, -10, 0, 10, 0, -10)
+
+var yC = new Array();
+var xC = new Array();
+
+var yCB = new Array();
+var xCB = new Array();
+
+var start = 0*1;
+
+function TimerFish(){
+	if(onOff == 0){
+		onOff = 1;
+		timer = setInterval("fish()", 70);
+	}
+	else if(onOff == 1){
+		onOff = 0;
+		clearInterval(timer);
+	}
+
+}
+
+function newFish(){
+	var deadFish = 7*1
+	for(c=0;c<6;c++){
+		if(alive[c] == 0){
+			deadFish = c
+		}
+	}
+	xC[deadFish] = Math.floor(Math.random() * 600 + 360)
+	yC[deadFish] = Math.floor(Math.random() * 300 + 240)
+	document.getElementById(array[deadFish]).src = "fishLeft.png"
+	document.getElementById(array[deadFish]).style.left = xC[deadFish]
+	document.getElementById(array[deadFish]).style.top = yC[deadFish]
+	alive[deadFish] = 1
+	
+	
+}
+
+function shark(a){
+	if(a != 5){
+		xC[a] = parseInt(document.getElementById(array[a]).style.left)
+		yC[a] = parseInt(document.getElementById(array[a]).style.top)
+		xC[5] = parseInt(document.getElementById(array[5]).style.left)
+		yC[5] = parseInt(document.getElementById(array[5]).style.top)
+		
+		var ourFishH = document.getElementById(array[a]).height
+		var ourFishW = document.getElementById(array[a]).width
+		
+		if((xC[a] <= xC[5] + 80) && (xC[a] >= xC[5]) && ((yC[a] <= yC[5] + 80) && (yC[a] + ourFishH >= yC[5])) ){
+			alive[a] = 0
+			document.getElementById(array[a]).src = "blank.gif"
+		
+		}
+		else if((xC[a] + ourFishW >= xC[5]) && (xC[a] <= xC[5] + 80) && ((yC[a] <= yC[5] + 80) && (yC[a] + ourFishH >= yC[5])) ){
+			alive[a] = 0
+			document.getElementById(array[a]).src = "blank.gif"
+		
+		}
+		else if((xC[a] + ourFishW >= xC[5]) && (xC[a] <= xC[5] + 80) && ((yC[a] <= yC[5] + 80) && (yC[a] >= yC[5])) ){
+			alive[a] = 0
+			document.getElementById(array[a]).src = "blank.gif"
+		
+		}
+		else if((xC[a] + ourFishW >= xC[5]) && (xC[a] <= xC[5] + 80) && ((yC[a] + ourFishH >= yC[5]) && (yC[a] <= yC[5] + 80)) ){
+			alive[a] = 0
+			document.getElementById(array[a]).src = "blank.gif"
+		
+		}
+	}	
+}
+
+function fish(){
+	for(a=0;a<6;a++){
+		
+		if(start == 0){
+			for(b=0;b<6;b++){
+				xCB[b] = Math.floor(Math.random() * 600 + 360)
+				yCB[b] = Math.floor(Math.random() * 300 + 250)
+		
+				document.getElementById(bubbleArray[b]).style.left = xCB[b]
+				document.getElementById(bubbleArray[b]).style.top = yCB[b]
+				document.getElementById(bubbleArray[b]).src = "bubble.gif"
+				start = 1
+			}
+		}
+		else if(start == 1){
+			
+			if(yCB[a] > 270){
+				yCB[a] -= 5
+			
+				document.getElementById(bubbleArray[a]).style.left = xCB[a]
+				document.getElementById(bubbleArray[a]).style.top = yCB[a]
+			}
+			else if(yCB[a] <= 270){
+				
+				xCB[a] = Math.floor(Math.random() * 600 + 360)
+				yCB[a] = 550
+		
+				document.getElementById(bubbleArray[a]).style.left = xCB[a]
+				document.getElementById(bubbleArray[a]).style.top = yCB[a]
+			}
+		}
+		
+		
+		
+		if(alive[a] == 1 || alive[a] == 2){
+		
+		shark(a);
+		
+		var direction = Math.floor(Math.random() * 99);
+		
+		xC[a] = parseInt(document.getElementById(array[a]).style.left)
+		yC[a] = parseInt(document.getElementById(array[a]).style.top)
+		
+		if(direction >= 0 && direction < 10){
+			dirY[a] = -10
+			dirX[a] = 0
+		}
+		else if(direction >= 25 && direction < 35){
+			dirX[a] = 10
+			dirY[a] = 0
+			if(alive[a] == 1){
+				document.getElementById(array[a]).src = "fishRight.png"
+			}
+			else if(alive[a] == 2){
+				document.getElementById(array[a]).src = "shark.gif"
+			}
+		}
+		else if(direction >= 50 && direction < 60){
+			dirY[a] = 10
+			dirX[a] = 0
+		}
+		else if(direction >= 75 && direction < 85){
+			dirX[a] = -10
+			dirY[a] = 0
+			if(alive[a] == 1){
+				document.getElementById(array[a]).src = "fishLeft.png"
+			}
+			else if(alive[a] == 2){
+				document.getElementById(array[a]).src = "shark.gif"
+			}
+		}
+		
+		
+		if(xC[a]>890){
+			dirX[a] = -10
+		}
+		else if(xC[a]<=360){
+			dirX[a] = 10
+		}
+		if(yC[a]<=270){
+			dirY[a] = 10
+		}
+		else if(yC[a]>500){
+			dirY[a] = -10
+		}
+		
+		xC[a] += dirX[a]
+		yC[a] += dirY[a]
+		
+		document.getElementById(array[a]).style.left = xC[a]
+		document.getElementById(array[a]).style.top = yC[a]
+		}
+		
+		
+	}
+	
+}
+
+
+</script>
+
+</head>
+<body>
+<div id="bg"><img src="background1.jpg" width="100%" height="100%" alt=""></div>
+<center>
+<table width="800px">
+<tr>
+<td>
+<center>
+
+<h1><img src="heading.jpg"></h1>
+
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+   <li><a href="index.htm" target="_self">Homepage</a></li>
+   <li><a href="freshman.html" target="_self">Freshman</a></li>
+   <li><a href="sophmore.htm" target="_self">Sophmore</a></li>
+	<li><a href="sophmore2.htm" target="_self"><span class="tag">Sophmore 2nd</span></a></li>
+</ul>
+</td>
+</tr>
+</table>
+<table class="topBarTable">
+<tr>
+<td>
+<ul id="menu">
+	<li><a href="assign16.htm" target="_self">BallOne</a></li>
+	<li><a href="assign17.htm" target="_self">BallFive</a></li>
+	<li><a href="assign18.htm" target="_self"><span class="tag">Fish</span></a></li>
+	<li><a href="assign19.htm" target="_self">Tank</a></li>
+	<li><a href="assign20.htm" target="_self">Digital Profile</a></li>
+</ul>
+</td>
+</tr>
+</table>
+
+
+<table width="600px" height="300px" border="2">
+<tr>
+<td>
+<img src="fishbackground.jpg" width="600" height="300">
+</td>
+</tr>
+</table>
+
+
+
+<input type="button" name="Auto" value="Animate" onclick="TimerFish()">
+<input type="button" name="revive" value="Revive" onclick="newFish()">
+<img width="50" height="50" src="fishLeft.png" id="fishOne" style="position:absolute; top:300; left:600">
+<img width="60" height="60" src="fishRight.png" id="fishTwo" style="position:absolute; top:270; left:800">
+<img width="30" height="30" src="fishLeft.png" id="fishThree" style="position:absolute; top:400; left:690">
+<img width="20" height="20" src="fishRight.png" id="fishFour" style="position:absolute; top:500; left:500">
+<img width="40" height="40" src="fishLeft.png" id="fishFive" style="position:absolute; top:520; left:700">
+<img width="80" height="80" src="shark.gif" id="shark" style="position:absolute; top:300; left: 400">
+<img width="20" height="20" src="bubble.gif" id="one" style="position:absolute; top:1000; left:1000">
+<img width="20" height="20" src="bubble.gif" id="two" style="position:absolute; top:1000; left:1000">
+<img width="20" height="20" src="bubble.gif" id="three" style="position:absolute; top:1000; left:1000">
+<img width="20" height="20" src="bubble.gif" id="four" style="position:absolute; top:1000; left:1000">
+<img width="20" height="20" src="bubble.gif" id="five" style="position:absolute; top:1000; left:1000">
+<img width="20" height="20" src="bubble.gif" id="six" style="position:absolute; top:1000; left:1000">
+
+<br>
+
+<table align="left">
+<tr>
+<td>
+<div class="info">San Ha Lee (Kevin)
+<br>
+Email: kevin651102@gmail.com
+<br>
+<a href="http://globalitacademy.us/">Global IT Academy</a>
+</div>
+</td>
+</tr>
+</table>
+
+</center>
+</td>
+</tr>
+</table>
+
+</center>
+
+
+
+</body>
+</html>
